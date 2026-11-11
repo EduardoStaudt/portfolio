@@ -4,7 +4,7 @@ import { setInkMode, setPageMode, useTheme } from '@/lib/hooks/useTheme';
 import { cn } from '@/lib/cn';
 
 const btn =
-  'bg-paper text-ink hover:bg-ink hover:text-paper grid h-10 min-w-10 place-items-center border-[2.5px] border-(--ink) px-2 transition-colors';
+  'bg-paper text-ink hover:bg-ink hover:text-paper flex h-10 min-w-10 items-center justify-center border-[2.5px] border-(--ink) px-2.5 whitespace-nowrap transition-colors';
 
 /** Dois controles: modo colorido (P&B ↔ cor) e página invertida (claro ↔ escuro). */
 export function ThemeToggle() {
@@ -20,10 +20,10 @@ export function ThemeToggle() {
         aria-label="Modo colorido"
         title={color ? 'Voltar ao preto e branco' : 'Ligar o modo colorido'}
         onClick={() => setInkMode(color ? 'bw' : 'color')}
-        className={cn(btn, 'gap-1.5')}
+        className={cn(btn, 'gap-2 sm:px-3')}
         suppressHydrationWarning
       >
-        <span aria-hidden className="flex gap-0.5">
+        <span aria-hidden className="flex shrink-0 gap-1">
           {['var(--accent)', 'var(--orange)', 'var(--blue)'].map((c, i) => (
             <span
               key={i}
