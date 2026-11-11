@@ -31,7 +31,8 @@ const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t 
 function Page({ children, seed, side }: { children: ReactNode; seed: number; side: 'l' | 'r' }) {
   return (
     <div className="bg-paper text-ink relative h-full w-full">
-      <div className="relative h-full w-full overflow-hidden">{children}</div>
+      {/* contêiner de tamanho: o conteúdo pode usar cqh/cqw para crescer junto com a página */}
+      <div className="[container-type:size] relative h-full w-full overflow-hidden">{children}</div>
       {/* sombra da lombada */}
       <div
         aria-hidden
@@ -48,7 +49,8 @@ function Page({ children, seed, side }: { children: ReactNode; seed: number; sid
 }
 
 /**
- * Livro com páginas duplas.
+ * Livro com páginas duplas, no sentido do mangá: lê-se da direita para a esquerda e as
+ * folhas viram para a direita (como a capa).
  * - Desktop: seção pinada (sticky); o scroll vertical vira as folhas em 3D (GSAP ScrollTrigger).
  *   A folha que está virando é trocada por uma versão em tiras (PageBend) e se curva como papel.
  * - Mobile / prefers-reduced-motion: carrossel de deslizar com scroll-snap.
@@ -85,10 +87,10 @@ export function PageFlip({ spreads, ariaLabel, header }: Props) {
             // folha flexível: quem gira são as tiras; a folha rígida fica escondida
             leaf.dataset.bending = '1';
             leaf.style.transform = 'none';
-            applyBend(bend, t);
+            applyBend(bend, t, 180);
           } else {
             delete leaf.dataset.bending;
-            leaf.style.transform = `rotateY(${-180 * t}deg)`;
+            leaf.style.transform = `rotateY(${180 * t}deg)`;
             leaf.style.setProperty('--shade', String(Math.sin(Math.PI * t) * 0.3));
           }
           leaf.style.zIndex = String(midway ? n + 1 : t > 0.5 ? j + 1 : n - j);
@@ -232,48 +234,49 @@ export function PageFlip({ spreads, ariaLabel, header }: Props) {
 
         {/* ---------- desktop: livro 3D ---------- */}
         <div
-          className="relative mx-auto hidden h-[min(66vh,700px)] w-full max-w-[1320px] lg:motion-safe:block"
+          className="relative mx-auto hidden h-[min(68vh,760px)] w-full max-w-[1320px] lg:motion-safe:block"
           style={{ perspective: '2600px' }}
         >
-          {/* base esquerda: página esquerda da primeira dupla */}
-          <div className="absolute top-0 left-0 h-full w-1/2" inert={index !== 0}>
-            <Page seed={11} side="l">
-              {spreads[0].left}
+          {/* base direita: página direita da primeira dupla */}
+          <div className="absolute top-0 left-1/2 h-full w-1/2" inert={index !== 0}>
+            <Page seed={11} side="r">
+              {spreads[0].right}
             </Page>
           </div>
-          {/* base direita: página direita da última dupla */}
-          <div className="absolute top-0 left-1/2 h-full w-1/2" inert={index !== n - 1}>
-            <Page seed={12} side="r">
-              {spreads[n - 1].right}
+          {/* base esquerda: página esquerda da última dupla */}
+          <div className="absolute top-0 left-0 h-full w-1/2" inert={index !== n - 1}>
+            <Page seed={12} side="l">
+              {spreads[n - 1].left}
             </Page>
           </div>
-          {/* folhas: frente = direita da dupla j, verso = esquerda da dupla j+1 */}
+          {/* folhas: frente = esquerda da dupla j, verso = direita da dupla j+1 */}
           {spreads.slice(0, -1).map((s, j) => (
             <div
               key={s.id}
               ref={(el) => {
                 leaves.current[j] = el;
               }}
-              className="preserve-3d absolute top-0 left-1/2 h-full w-1/2 origin-left will-change-transform"
+              className="preserve-3d absolute top-0 left-0 h-full w-1/2 origin-right will-change-transform"
               style={{ zIndex: n - j }}
             >
               {turning === j && (
                 <PageBend
+                  spine="right"
                   front={
-                    <Page seed={20 + j} side="r">
-                      {s.right}
+                    <Page seed={20 + j} side="l">
+                      {s.left}
                     </Page>
                   }
                   back={
-                    <Page seed={40 + j} side="l">
-                      {spreads[j + 1].left}
+                    <Page seed={40 + j} side="r">
+                      {spreads[j + 1].right}
                     </Page>
                   }
                 />
               )}
               <div data-rigid className="absolute inset-0 backface-hidden" inert={index !== j}>
-                <Page seed={20 + j} side="r">
-                  {s.right}
+                <Page seed={20 + j} side="l">
+                  {s.left}
                 </Page>
                 <div
                   aria-hidden
@@ -285,8 +288,8 @@ export function PageFlip({ spreads, ariaLabel, header }: Props) {
                 className="absolute inset-0 [transform:rotateY(180deg)] backface-hidden"
                 inert={index !== j + 1}
               >
-                <Page seed={40 + j} side="l">
-                  {spreads[j + 1].left}
+                <Page seed={40 + j} side="r">
+                  {spreads[j + 1].right}
                 </Page>
                 <div
                   aria-hidden
@@ -312,9 +315,12 @@ export function PageFlip({ spreads, ariaLabel, header }: Props) {
             >
               <div className="bg-paper relative">
                 <div className="grid lg:grid-cols-2">
-                  <div className="relative min-h-[22rem] overflow-hidden">{s.left}</div>
-                  <div className="relative overflow-hidden border-t-4 border-(--ink) lg:border-t-0 lg:border-l-4">
+                  {/* a página direita é lida primeiro: no celular ela vem em cima */}
+                  <div className="relative min-h-[22rem] overflow-hidden border-(--ink) lg:order-2 lg:border-l-4">
                     {s.right}
+                  </div>
+                  <div className="relative overflow-hidden border-t-4 border-(--ink) lg:order-1 lg:border-t-0">
+                    {s.left}
                   </div>
                 </div>
                 <InkBorder seed={60 + i} />
