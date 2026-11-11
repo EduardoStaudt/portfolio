@@ -1,7 +1,10 @@
 /**
- * Currículo (página /curriculo). Na tela segue o estilo do site; ao imprimir vira um
- * documento formal (ver o bloco `@media print` em app/globals.css).
+ * Currículo (página /curriculo). Na tela é a "ficha do protagonista", no estilo do site;
+ * ao imprimir vira um documento formal, em preto e branco, que cabe em uma folha A4
+ * (ver o bloco `@media print` em app/globals.css).
  */
+
+import { site } from './site';
 
 export const cv = {
   headline: 'Ciência da Computação e Ciências Econômicas · foco em Machine Learning',
@@ -18,6 +21,11 @@ export const cv = {
       course: 'Bacharelado em Ciências Econômicas',
       school: 'Uninter, polo Santa Helena',
       status: '4º período · conclusão em dez/2028',
+    },
+    {
+      course: 'Técnico em Administração',
+      school: 'Curso profissionalizante no ensino médio',
+      status: 'concluído',
     },
   ],
   experience: [
@@ -46,30 +54,46 @@ export const cv = {
       name: 'NNAdsorption',
       stack: 'Python, ONNX Runtime, FastAPI, Flutter Web',
       text: 'biblioteca que roda o modelo da pesquisa no lugar do solver numérico e plataforma web em desenvolvimento que o expõe por API REST.',
-      link: { label: 'site', href: 'https://nnadsorption-app.web.app/' },
+      links: ['https://nnadsorption-app.web.app/'],
     },
     {
-      name: 'GymSolver',
-      stack: 'Java, SQLite',
-      text: 'sistema para academia feito em Programação Orientada a Objetos.',
+      name: 'Glazzy',
+      stack: 'Web',
+      text: 'ERP para vidraçarias, do orçamento à entrega em um só lugar. Produto no ar.',
+      links: ['https://glazzy.pages.dev'],
+    },
+    {
+      name: 'Portfólio',
+      stack: 'Next.js, TypeScript, Tailwind CSS',
+      text: 'site pessoal em formato de mangá, com animações de página, cena 3D e um jogo de cartas com IA.',
+      // o endereço entra sozinho quando `site.url` deixar de ser placeholder (lib/data/site.ts)
+      links: site.url.includes('TODO_') ? [] : [site.url],
     },
     {
       name: 'Hero Maze',
       stack: 'Godot 4, GDScript',
       text: 'jogo feito em equipe no projeto integrador. Fui vice-líder e o principal artista de pixel art, e ajudei em código, documentação e QA.',
-      link: { label: 'itch.io', href: 'https://thefenexy.itch.io/hero-maze' },
+      links: ['https://thefenexy.itch.io/hero-maze'],
+    },
+    {
+      name: 'GymSolver',
+      stack: 'Java, SQLite',
+      text: 'sistema para academia feito em Programação Orientada a Objetos.',
+      links: ['https://github.com/EduardoStaudt/gymsolver-poo'],
     },
     {
       name: 'Batalha Naval em Assembly',
-      stack: '',
+      stack: 'Assembly',
       text: 'jogo contra o computador em tempo real, projeto final de Arquitetura e Organização de Computadores.',
+      links: ['https://github.com/EduardoStaudt/BatalhaNavalAssembly'],
     },
     {
       name: 'Análise de algoritmos de ordenação',
       stack: 'Java, Go, Python',
-      text: 'benchmark de tempo, comparações e trocas de algoritmos como quick, merge, radix e heap, em entradas de até 2 milhões de elementos.',
+      text: 'benchmark de tempo, comparações e trocas de quick, merge, radix e heap sort, em entradas de até 2 milhões de elementos.',
+      links: ['https://github.com/EduardoStaudt/AnalyzingSortingAlgorithms-PO'],
     },
-  ] as { name: string; stack: string; text: string; link?: { label: string; href: string } }[],
+  ] as { name: string; stack: string; text: string; links: string[] }[],
   honors: [
     'Apresentação da pesquisa de iniciação científica no CNMAC 2026, o Congresso Nacional de Matemática Aplicada e Computacional.',
     'Certificados na OBMEP, a Olimpíada Brasileira de Matemática das Escolas Públicas.',

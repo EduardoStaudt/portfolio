@@ -330,10 +330,6 @@ html.has-ink-cursor * {
   display: none;
 }
 
-/*
- * Impressão: tudo vira documento formal (usado pela página /curriculo).
- * Papel branco, tinta preta, fonte de texto em tudo, sem bordas desenhadas, retículas ou sombras.
- */
 /* folha virando em tiras flexíveis (PageBend): a versão rígida some enquanto isso */
 [data-bending] > [data-rigid] {
   visibility: hidden;
@@ -344,10 +340,14 @@ html[data-stab] .cursor-nib {
   visibility: hidden;
 }
 
+/*
+ * Impressão: tudo vira documento formal (usado pela página /curriculo).
+ * Papel branco, tinta preta, fonte de texto em tudo, sem bordas desenhadas, retículas ou sombras.
+ */
 @media print {
   @page {
     size: A4;
-    margin: 9mm;
+    margin: 11mm 12mm;
   }
   :root,
   :root[data-page],
@@ -355,26 +355,28 @@ html[data-stab] .cursor-nib {
     --paper: #fff !important;
     --paper-shade: #fff !important;
     --ink: #000 !important;
-    --accent: #c2182b !important;
-    --accent-text: #c2182b !important;
+    --accent: #000 !important;
+    --accent-text: #000 !important;
     --on-accent: #fff !important;
+    /* documento formal: uma fonte só, a de texto */
     --ff-bubble: var(--ff-body) !important;
+    --ff-display: var(--ff-body) !important;
     color-scheme: light !important;
   }
   /* tudo que usa rem encolhe junto: o currículo cabe em uma folha */
   html {
-    font-size: 12.6px !important;
+    font-size: 13.3px !important;
   }
   html,
   body {
     background: #fff !important;
     background-image: none !important;
   }
-  /* a faixa preta e os detalhes vermelhos saem mesmo com "gráficos de fundo" desligado */
-  .cv-sheet,
-  .cv-sheet * {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+  h1,
+  h2,
+  h3 {
+    font-weight: 700;
+    letter-spacing: 0;
   }
   .ink-border,
   .speed-lines,
@@ -388,7 +390,14 @@ html[data-stab] .cursor-nib {
   .shadow-bubble {
     box-shadow: none !important;
   }
+  /* rótulos: sem caixa alta nem cara de balão */
   .font-bubble {
-    letter-spacing: 0.02em;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  /* os marcadores (bolinhas) saem mesmo com "gráficos de fundo" desligado */
+  .cv-sheet * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }
