@@ -1,5 +1,8 @@
+'use client';
+
 import type { ReactNode } from 'react';
 import type { AboutArt } from '@/lib/data/about';
+import { PIXEL_COLORS, PIXEL_SIZE, usePixels } from '@/lib/pixel-store';
 import { seeded } from '@/lib/random';
 
 /**
@@ -168,134 +171,126 @@ function Network() {
   );
 }
 
-function Bootcamp() {
+/** Notebook: a tela mostra a pixel art do ateliê da página secreta (lib/pixel-store) e um gráfico de barras. */
+function Laptop() {
+  const cells = usePixels();
+  const px = 10;
+  const ox = 104;
+  const oy = 68;
+  const side = PIXEL_SIZE * px;
+  const grid: string[] = [];
+  for (let i = 0; i <= PIXEL_SIZE; i++) {
+    grid.push(`M${ox + i * px} ${oy}v${side}`, `M${ox} ${oy + i * px}h${side}`);
+  }
   return (
     <>
-      {/* notebook */}
       <rect
-        x="92"
-        y="64"
-        width="216"
-        height="142"
+        x="84"
+        y="44"
+        width="232"
+        height="168"
         rx="6"
         fill={PAPER}
         stroke={INK}
         strokeWidth="4"
       />
-      <rect x="106" y="78" width="188" height="114" fill={PAPER} stroke={INK} strokeWidth="2" />
-      <path d="M120 92v88h160" {...line} strokeWidth={2.5} />
-      <path
-        d="M124 100C150 150 170 160 200 166S250 172 276 174"
-        stroke="var(--accent)"
-        strokeWidth="5"
-        fill="none"
-        strokeLinecap="round"
-      />
-      <path d="M124 118C156 140 190 150 276 156" {...line} strokeWidth={2} strokeDasharray="5 6" />
-      {[148, 176, 204, 232, 260].map((x, i) => (
-        <circle key={x} cx={x} cy={[146, 160, 166, 170, 173][i]} r="4" fill={INK} />
+      <rect x="96" y="56" width="208" height="144" fill={PAPER} stroke={INK} strokeWidth="2" />
+      {/* editor de sprites */}
+      <rect x={ox} y={oy} width={side} height={side} fill={PAPER} stroke={INK} strokeWidth="2.5" />
+      {cells.map((c, i) =>
+        c === 0 ? null : (
+          <rect
+            key={i}
+            x={ox + (i % PIXEL_SIZE) * px}
+            y={oy + Math.floor(i / PIXEL_SIZE) * px}
+            width={px}
+            height={px}
+            fill={PIXEL_COLORS[c].css}
+          />
+        ),
+      )}
+      <path d={grid.join('')} stroke={INK} strokeWidth="0.5" opacity="0.3" />
+      {/* benchmark de ordenação */}
+      <path d="M236 70v118h62" {...line} strokeWidth={2.5} />
+      {[26, 44, 60, 82, 104].map((h, i) => (
+        <rect
+          key={h}
+          x={242 + i * 11}
+          y={186 - h}
+          width="8"
+          height={h}
+          fill={i === 4 ? 'var(--spot)' : INK}
+          stroke={INK}
+          strokeWidth="1.5"
+        />
       ))}
       <path
-        d="M62 236L92 206H308L338 236Z"
+        d="M58 242L84 212H316L342 242Z"
         fill={PAPER}
         stroke={INK}
         strokeWidth="4"
         strokeLinejoin="round"
       />
-      <path d="M110 216H290M102 226H298" {...line} strokeWidth={2} strokeDasharray="10 5" />
-      {/* café */}
-      <path
-        d="M340 150h36v34c0 10 -8 16 -18 16s-18 -6 -18 -16Z"
-        fill="var(--spot-2)"
-        stroke={INK}
-        strokeWidth="3"
-      />
-      <path d="M376 158c12 0 12 20 0 20" {...line} />
-      <path d="M350 138c-4 -8 4 -10 0 -18M364 138c-4 -8 4 -10 0 -18" {...line} strokeWidth={2} />
+      <path d="M104 222H296M94 232H306" {...line} strokeWidth={2} strokeDasharray="10 5" />
     </>
   );
 }
 
-// sprite original: um bichinho de chifres, 12x12
-export const SPRITE = [
-  '..#......#..',
-  '.##......##.',
-  '.#o######o#.',
-  '.#oooooooo#.',
-  '#oo#oooo#oo#',
-  '#oo#oooo#oo#',
-  '#oooooooooo#',
-  '#oo######oo#',
-  '#oo#.##.#oo#',
-  '.#oooooooo#.',
-  '.##oo##oo##.',
-  '..##....##..',
-];
-
-function Pixel() {
-  const px = 15;
-  const ox = 46;
-  const oy = 66;
-  const cells: ReactNode[] = [];
-  SPRITE.forEach((row, y) =>
-    [...row].forEach((c, x) => {
-      if (c === '.') return;
-      cells.push(
-        <rect
-          key={`${x}-${y}`}
-          x={ox + x * px}
-          y={oy + y * px}
-          width={px}
-          height={px}
-          fill={c === '#' ? INK : 'var(--spot)'}
-        />,
-      );
-    }),
-  );
-  const grid: string[] = [];
-  for (let i = 0; i <= 12; i++) {
-    grid.push(`M${ox + i * px} ${oy}v${12 * px}`, `M${ox} ${oy + i * px}h${12 * px}`);
-  }
+/** Diploma do curso técnico, com uma pasta e um gráfico de barras. */
+function Diploma() {
   return (
     <>
+      <path d="M0 250H400" {...line} strokeWidth={4} />
+      {/* diploma */}
+      <g transform="rotate(-6 200 130)">
+        <rect x="112" y="62" width="176" height="128" fill={PAPER} stroke={INK} strokeWidth="4" />
+        <rect x="122" y="72" width="156" height="108" fill="none" stroke={INK} strokeWidth="1.5" />
+        <path d="M150 96H250" {...line} strokeWidth={6} />
+        <path d="M140 118H260M140 132H260M140 146H216" {...line} strokeWidth={2} />
+        {/* selo e fitas */}
+        <path
+          d="M240 168l-10 34l14 -8l8 14l6 -36Z"
+          fill="var(--spot)"
+          stroke={INK}
+          strokeWidth="2.5"
+          strokeLinejoin="round"
+        />
+        <circle cx="248" cy="160" r="17" fill="var(--spot-2)" stroke={INK} strokeWidth="3.5" />
+        <circle cx="248" cy="160" r="9" fill="none" stroke={INK} strokeWidth="1.8" />
+      </g>
+      {/* pasta executiva */}
+      <path d="M118 214v-10h30v10" {...line} strokeWidth={4} />
       <rect
-        x={ox - 8}
-        y={oy - 8}
-        width={12 * px + 16}
-        height={12 * px + 16}
+        x="92"
+        y="214"
+        width="82"
+        height="52"
+        rx="5"
         fill={PAPER}
         stroke={INK}
         strokeWidth="4"
       />
-      {cells}
-      <path d={grid.join('')} stroke={INK} strokeWidth="0.6" opacity="0.35" />
-      {/* paleta */}
-      {['var(--ink)', 'var(--spot)', 'var(--spot-2)', 'var(--spot-3)', 'var(--paper)'].map(
-        (c, i) => (
-          <rect
-            key={i}
-            x="262"
-            y={70 + i * 34}
-            width="28"
-            height="28"
-            fill={c}
-            stroke={INK}
-            strokeWidth="3"
-          />
-        ),
-      )}
-      {/* lápis */}
-      <g transform="rotate(32 340 170)">
-        <rect x="328" y="96" width="24" height="110" fill={PAPER} stroke={INK} strokeWidth="3" />
-        <path
-          d="M328 206l12 26l12 -26Z"
-          fill={INK}
+      <path d="M92 236H174" {...line} strokeWidth={3} />
+      <rect x="126" y="230" width="14" height="12" fill={INK} />
+      {/* gráfico de barras subindo */}
+      {[18, 30, 44, 62].map((h, i) => (
+        <rect
+          key={h}
+          x={228 + i * 22}
+          y={250 - h}
+          width="15"
+          height={h}
+          fill={i === 3 ? 'var(--spot-3)' : PAPER}
           stroke={INK}
           strokeWidth="3"
-          strokeLinejoin="round"
         />
-        <rect x="328" y="96" width="24" height="16" fill={INK} />
-      </g>
+      ))}
+      <path d="M226 206l28 -14l20 8l34 -30" {...line} strokeWidth={3} />
+      <path d="M296 168h13v13" {...line} strokeWidth={3} />
+      <path
+        d="M96 70l4 9l9 4l-9 4l-4 9l-4 -9l-9 -4l9 -4ZM306 46l3 7l7 3l-7 3l-3 7l-3 -7l-7 -3l7 -3Z"
+        fill={INK}
+      />
     </>
   );
 }
@@ -384,8 +379,8 @@ const arts: Record<AboutArt, () => ReactNode> = {
   hero: Hero,
   campus: Campus,
   network: Network,
-  laptop: Bootcamp,
-  pixel: Pixel,
+  diploma: Diploma,
+  laptop: Laptop,
   medals: Medals,
   horizon: Horizon,
 };

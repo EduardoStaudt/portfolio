@@ -2,30 +2,26 @@
 
 import { useState } from 'react';
 import { secretPage } from '@/lib/data/eggs';
-import { SPRITE } from '@/components/manga/illustrations/about';
+import {
+  PIXEL_COLORS as COLORS,
+  PIXEL_SIZE as SIZE,
+  clearPixels,
+  paintPixel,
+  resetPixels,
+  usePixels,
+} from '@/lib/pixel-store';
 import { cn } from '@/lib/cn';
 
-const SIZE = 12;
-const COLORS = [
-  { name: 'Borracha', css: 'transparent' },
-  { name: 'Nanquim', css: 'var(--ink)' },
-  { name: 'Vermelho', css: 'var(--spot)' },
-  { name: 'Laranja', css: 'var(--spot-2)' },
-  { name: 'Azul', css: 'var(--spot-3)' },
-];
-
-const fromSprite = (): number[] =>
-  SPRITE.flatMap((row) => [...row].map((c) => (c === '#' ? 1 : c === 'o' ? 2 : 0)));
-const empty = () => new Array<number>(SIZE * SIZE).fill(0);
-
-/** Mini editor de pixel art 12x12 da página secreta. Começa com o bichinho do Cap. 1. */
+/**
+ * Mini editor de pixel art 12x12 da página secreta. O desenho fica em lib/pixel-store:
+ * o que for pintado aqui aparece na tela do notebook do Cap. 1.
+ */
 export function PixelEditor() {
-  const [cells, setCells] = useState(fromSprite);
+  const cells = usePixels();
   const [color, setColor] = useState(1);
   const { editor } = secretPage;
 
-  const paint = (i: number) =>
-    setCells((cur) => (cur[i] === color ? cur : cur.map((c, j) => (j === i ? color : c))));
+  const paint = (i: number) => paintPixel(i, color);
 
   return (
     <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:gap-8">
@@ -79,14 +75,14 @@ export function PixelEditor() {
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={() => setCells(empty)}
+            onClick={clearPixels}
             className="font-bubble border-[2.5px] border-(--ink) px-3 py-2 text-xs"
           >
             {editor.clear}
           </button>
           <button
             type="button"
-            onClick={() => setCells(fromSprite)}
+            onClick={resetPixels}
             className="font-bubble border-[2.5px] border-(--ink) px-3 py-2 text-xs"
           >
             {editor.reset}

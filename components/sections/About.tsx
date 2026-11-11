@@ -15,6 +15,7 @@ import {
   SpeedLines,
   ThoughtBubble,
 } from '@/components/manga';
+import { BreakBubble } from '@/components/manga/BreakBubble';
 import { AboutIllustration } from '@/components/manga/illustrations/about';
 import { StrawHat } from '@/components/easter-eggs/StrawHat';
 import { cn } from '@/lib/cn';
@@ -36,6 +37,16 @@ const backdrops = [
 function BubbleItem({ bubble, index }: { bubble: Bubble; index: number }) {
   const side = index % 2 === 0 ? 'self-end' : 'self-start';
   const tail = index % 2 === 0 ? 'bl' : 'br';
+  if (bubble.reveal)
+    return (
+      <BreakBubble
+        text={bubble.text}
+        reveal={bubble.reveal}
+        tail={tail}
+        delay={0.1 * index}
+        className={side}
+      />
+    );
   if (bubble.kind === 'thought')
     return (
       <ThoughtBubble tail={tail} delay={0.1 * index} className={cn(side, 'mb-8')}>

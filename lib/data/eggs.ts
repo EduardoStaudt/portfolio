@@ -9,7 +9,7 @@ export type Egg = {
   found: string;
   /** dica mostrada na página secreta enquanto não foi achado */
   hint: string;
-  /** conta no contador, mas não é exigido para abrir a página secreta */
+  /** bônus: não entra no contador nem é exigido para abrir a página secreta */
   optional?: boolean;
 };
 
@@ -140,7 +140,7 @@ export const secretPage = {
   },
   editor: {
     title: 'Ateliê de pixel art',
-    lead: 'Meu ofício secreto. Pinte o seu próprio sprite: clique ou arraste na grade.',
+    lead: 'Pinte o seu próprio sprite: clique ou arraste na grade. O que você desenhar aqui aparece na tela do notebook do Capítulo 1.',
     clear: 'Limpar',
     reset: 'Voltar ao bichinho',
   },

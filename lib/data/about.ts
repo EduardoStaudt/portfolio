@@ -4,11 +4,16 @@
  * (as ilustrações disponíveis ficam em components/manga/illustrations).
  */
 
-export type AboutArt = 'hero' | 'campus' | 'network' | 'laptop' | 'pixel' | 'medals' | 'horizon';
+export type AboutArt = 'hero' | 'diploma' | 'campus' | 'network' | 'laptop' | 'medals' | 'horizon';
 
 export type Bubble = {
   kind: 'speech' | 'shout' | 'whisper' | 'thought';
   text: string;
+  /**
+   * balão-máscara: `text` é a pergunta à mostra; ao clicar, o balão quebra e revela isto
+   * (ver components/manga/BreakBubble.tsx)
+   */
+  reveal?: string;
 };
 
 export type Sfx = {
@@ -51,6 +56,21 @@ export const aboutPanels: AboutPanel[] = [
     size: 'lg',
   },
   {
+    id: 'tecnico',
+    art: 'diploma',
+    alt: 'Um diploma com selo e fita, ao lado de uma pasta executiva e de um gráfico de barras.',
+    caption: 'Antes da faculdade...',
+    bubbles: [
+      {
+        kind: 'speech',
+        text: 'No ensino médio fiz o técnico em Administração, como curso profissionalizante.',
+      },
+      { kind: 'thought', text: 'Foi ali que comecei a entender como um negócio funciona.' },
+    ],
+    sfx: { text: 'パサッ', sub: 'PAH', tone: 'orange' },
+    size: 'md',
+  },
+  {
     id: 'cursos',
     art: 'campus',
     alt: 'Dois prédios de universidade lado a lado, ligados por uma ponte.',
@@ -78,7 +98,7 @@ export const aboutPanels: AboutPanel[] = [
   {
     id: 'faculdade',
     art: 'laptop',
-    alt: 'Um notebook aberto mostrando um gráfico com uma curva descendo.',
+    alt: 'Um notebook aberto mostrando um sprite em pixel art e um gráfico de barras.',
     caption: 'Entre uma aula e outra...',
     bubbles: [
       {
@@ -87,26 +107,15 @@ export const aboutPanels: AboutPanel[] = [
       },
       {
         kind: 'speech',
-        text: 'E medi quick, merge, radix e heap sort com até 2 milhões de elementos.',
+        text: 'Medi quick, merge, radix e heap sort com até 2 milhões de elementos.',
+      },
+      {
+        kind: 'speech',
+        text: 'E nos jogos da faculdade, os sprites em pixel art ficam comigo.',
       },
     ],
     sfx: { text: 'カタカタ', sub: 'TEC TEC', tone: 'ink' },
-    size: 'md',
-  },
-  {
-    id: 'pixel',
-    art: 'pixel',
-    alt: 'Uma grade de pixels formando um pequeno monstro de jogo, ao lado de uma paleta de cores.',
-    caption: 'Enquanto isso, no editor de sprites...',
-    bubbles: [
-      {
-        kind: 'speech',
-        text: 'Também sou pixel artist. Chefes e inimigos são a minha especialidade.',
-      },
-      { kind: 'whisper', text: '(cada pixel no lugar certo.)' },
-    ],
-    sfx: { text: 'ポチッ', sub: 'CLIC', tone: 'orange' },
-    size: 'md',
+    size: 'lg',
   },
   {
     id: 'objetivo',
@@ -114,7 +123,7 @@ export const aboutPanels: AboutPanel[] = [
     alt: 'Uma estrada que sobe uma montanha até uma bandeira fincada no topo, com o sol nascendo atrás.',
     caption: 'O objetivo final.',
     bubbles: [
-      { kind: 'speech', text: 'Meu plano? Empreender.' },
+      { kind: 'speech', text: 'Meu plano?', reveal: 'Empreender!' },
       {
         kind: 'speech',
         text: 'Juntar código, dados e economia em algo que resolva problema de verdade.',
