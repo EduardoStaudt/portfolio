@@ -120,9 +120,12 @@ function CoverFace({ clone = false }: { clone?: boolean }) {
               {site.focus}
             </p>
           </div>
-          <p className="font-bubble bob flex items-center gap-2 text-xs" aria-hidden>
-            <span className="motion-reduce:hidden">Role para abrir a capa</span>
-            <span className="font-display text-lg">↓</span>
+          <p
+            className="font-bubble bob flex items-center gap-3 text-[clamp(1.15rem,3.2vw,3rem)] leading-none"
+            aria-hidden
+          >
+            <span className="ink-outline motion-reduce:hidden">Role para abrir a capa</span>
+            <span className="font-display ink-outline text-accent text-[1.3em]">↓</span>
           </p>
         </div>
       </div>
