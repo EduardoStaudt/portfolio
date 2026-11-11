@@ -31,7 +31,7 @@ export function EasterEggProvider({ children }: { children: ReactNode }) {
   const [duel, setDuel] = useState(false);
   const closeGrimoire = useCallback(() => setGrimoire(false), []);
   const closeDuel = useCallback(() => setDuel(false), []);
-  const { found, total, allFound } = useEggs();
+  const { count, total, allFound } = useEggs();
 
   const unlock = useCallback((id: EggId, offerDuel = false) => {
     unlockEgg(id);
@@ -99,7 +99,7 @@ export function EasterEggProvider({ children }: { children: ReactNode }) {
             >
               <p className="font-display text-base">{toast.text}</p>
               <p className="font-bubble text-xs">
-                Segredos: {found.length}/{total}
+                Segredos: {count}/{total}
               </p>
               {toast.offerDuel && (
                 <button

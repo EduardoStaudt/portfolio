@@ -32,9 +32,10 @@ const parse = (raw: string) =>
 export function useEggs() {
   const raw = useSyncExternalStore(subscribe, read, () => '');
   const found = parse(raw);
-  // a página secreta abre com os segredos obrigatórios; os opcionais só somam no contador
-  const allFound = eggs.every((e) => e.optional || found.includes(e.id));
-  return { found, total: eggs.length, allFound };
+  // só os segredos obrigatórios entram na conta; os opcionais (bônus) ficam de fora
+  const required = eggs.filter((e) => !e.optional);
+  const count = required.filter((e) => found.includes(e.id)).length;
+  return { found, count, total: required.length, allFound: count === required.length };
 }
 
 /** Marca um segredo como encontrado. Devolve `true` se era novo. */

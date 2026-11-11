@@ -23,7 +23,7 @@ const komaArt: AboutArt[] = ['laptop', 'hero', 'network', 'horizon'];
 
 /** Página secreta: lacrada (com dicas) até todos os easter eggs serem encontrados. */
 export function SecretPage() {
-  const { found, total, allFound } = useEggs();
+  const { found, count, total, allFound } = useEggs();
 
   return (
     <main
@@ -33,7 +33,7 @@ export function SecretPage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="font-bubble bg-ink text-paper inline-block px-2.5 py-1 text-xs">
-            Segredos: <span suppressHydrationWarning>{found.length}</span>/{total}
+            Segredos: <span suppressHydrationWarning>{count}</span>/{total}
           </p>
           <h1 className="mt-2 text-(length:--fs-3xl)">
             {allFound ? secretPage.title : 'Página lacrada'}
