@@ -163,11 +163,8 @@ export function tokensToCss(): string {
 
   return [
     `:root{${block(staticVars)}${block(baseTheme)}color-scheme:light;}`,
-    // respeita o sistema quando o visitante ainda não escolheu
-    `@media (prefers-color-scheme:dark){:root:not([data-page="light"]){${block(darkTheme)}color-scheme:dark;}}`,
     `:root[data-page="dark"]{${block(darkTheme)}color-scheme:dark;}`,
     `:root[data-ink="color"]{${block(colorTheme)}}`,
-    `@media (prefers-color-scheme:dark){:root[data-ink="color"]:not([data-page="light"]){${block(colorDarkTheme)}}}`,
     `:root[data-ink="color"][data-page="dark"]{${block(colorDarkTheme)}}`,
   ].join('\n');
 }

@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { Comic_Neue, Dela_Gothic_One, Inter } from 'next/font/google';
 import { palette, tokensToCss } from '@/styles/tokens';
-import { themeInitScript } from '@/lib/hooks/useTheme';
+import { DEFAULT_THEME, themeInitScript } from '@/lib/theme';
 import { site } from '@/lib/data/site';
 import { Providers } from '@/components/Providers';
 import { Header } from '@/components/ui/Header';
@@ -54,10 +54,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: palette.paper },
-    { media: '(prefers-color-scheme: dark)', color: palette.nightPaper },
-  ],
+  themeColor: palette.nightPaper,
   width: 'device-width',
   initialScale: 1,
 };
@@ -66,6 +63,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="pt-BR"
+      data-ink={DEFAULT_THEME.ink}
+      data-page={DEFAULT_THEME.page}
       suppressHydrationWarning
       className={`${display.variable} ${body.variable} ${bubble.variable}`}
     >
