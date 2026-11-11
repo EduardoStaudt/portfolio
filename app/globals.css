@@ -1,0 +1,394 @@
+@import 'tailwindcss';
+
+/*
+ * As CSS variables (--paper, --ink, --accent, --z-*, --dur-*...) vêm de styles/tokens.ts,
+ * injetadas no <head> pelo layout. Aqui elas só são lidas.
+ */
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-shade: var(--paper-shade);
+  --color-ink: var(--ink);
+  --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
+  --color-accent-dark: var(--accent-dark);
+  --color-accent-text: var(--accent-text);
+  --color-on-accent: var(--on-accent);
+  --color-orange: var(--orange);
+  --color-orange-text: var(--orange-text);
+  --color-blue: var(--blue);
+  --color-blue-text: var(--blue-text);
+
+  --font-display: var(--ff-display);
+  --font-body: var(--ff-body);
+  --font-bubble: var(--ff-bubble);
+
+  --shadow-panel: var(--shadow-panel);
+  --shadow-lift: var(--shadow-lift);
+  --shadow-bubble: var(--shadow-bubble);
+
+  --ease-out-expo: var(--ease-out);
+  --ease-impact: var(--ease-impact);
+
+  --breakpoint-3xl: 120rem;
+}
+
+@layer base {
+  html {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--ff-body);
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: var(--space-header);
+  }
+
+  body {
+    min-height: 100dvh;
+    overflow-x: clip;
+    background: var(--paper);
+    /* grão sutil de papel */
+    background-image:
+      radial-gradient(
+        circle at 20% 10%,
+        color-mix(in srgb, var(--ink) 4%, transparent),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 80% 90%,
+        color-mix(in srgb, var(--ink) 5%, transparent),
+        transparent 45%
+      );
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  :root[data-ink='color'] :focus-visible {
+    outline-color: var(--blue);
+  }
+
+  img[src$='logo.svg'],
+  .pixelated {
+    image-rendering: pixelated;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--ff-display);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* ---------- utilidades de mangá ---------- */
+
+@utility font-bubble {
+  font-family: var(--ff-bubble);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.18;
+}
+
+/* texto com contorno de papel, como onomatopeia recortada */
+@utility ink-outline {
+  -webkit-text-stroke: 0.14em var(--paper);
+  paint-order: stroke fill;
+}
+
+/* letras vazadas */
+@utility ink-hollow {
+  color: var(--paper);
+  -webkit-text-stroke: 0.035em var(--ink);
+  paint-order: stroke fill;
+}
+
+/* borda "feita à mão" barata para elementos pequenos */
+@utility hand-box {
+  border: var(--bw-thin) solid var(--ink);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+/* retícula */
+.screentone {
+  --tone-size: 8px;
+  --tone-dot: 26%;
+  color: var(--ink);
+  background-image:
+    radial-gradient(circle, currentColor var(--tone-dot), transparent calc(var(--tone-dot) + 6%)),
+    radial-gradient(circle, currentColor var(--tone-dot), transparent calc(var(--tone-dot) + 6%));
+  background-size: var(--tone-size) var(--tone-size);
+  background-position:
+    0 0,
+    calc(var(--tone-size) / 2) calc(var(--tone-size) / 2);
+}
+.screentone-hatch {
+  color: var(--ink);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    currentColor 0 1.5px,
+    transparent 1.5px var(--tone-size, 7px)
+  );
+}
+.screentone-cross {
+  color: var(--ink);
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      currentColor 0 1.5px,
+      transparent 1.5px var(--tone-size, 7px)
+    ),
+    repeating-linear-gradient(45deg, currentColor 0 1.5px, transparent 1.5px var(--tone-size, 7px));
+}
+
+@keyframes tone-drift {
+  to {
+    background-position:
+      var(--tone-size) var(--tone-size),
+      calc(var(--tone-size) * 1.5) calc(var(--tone-size) * 1.5);
+  }
+}
+@keyframes speed-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+@keyframes shake {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  15% {
+    transform: translate3d(calc(var(--shake, 6px) * -1), calc(var(--shake, 6px) * 0.6), 0);
+  }
+  30% {
+    transform: translate3d(var(--shake, 6px), calc(var(--shake, 6px) * -0.6), 0);
+  }
+  45% {
+    transform: translate3d(calc(var(--shake, 6px) * -0.7), calc(var(--shake, 6px) * -0.4), 0);
+  }
+  60% {
+    transform: translate3d(calc(var(--shake, 6px) * 0.6), calc(var(--shake, 6px) * 0.5), 0);
+  }
+  80% {
+    transform: translate3d(calc(var(--shake, 6px) * -0.3), 0, 0);
+  }
+}
+@keyframes tremble {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-1.4deg) translateX(-1px);
+  }
+  75% {
+    transform: rotate(1.4deg) translateX(1px);
+  }
+}
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+@keyframes glint {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  40% {
+    transform: scale(1.2) rotate(40deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0) rotate(90deg);
+    opacity: 0;
+  }
+}
+@keyframes slash-draw {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  55% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+/* loader: tinta escorrendo. 100% CSS para aparecer antes do JS e sumir mesmo sem ele */
+@keyframes ink-drip {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+@keyframes loader-logo {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes loader-out {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    visibility: visible;
+  }
+  99% {
+    visibility: visible;
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tone-animated {
+    animation: tone-drift 2.4s linear infinite;
+  }
+  .speed-animated {
+    animation: speed-pulse 1.6s ease-in-out infinite;
+  }
+  #manga-root.is-shaking {
+    animation: shake 0.42s linear;
+  }
+  .tremble {
+    animation: tremble 0.12s linear infinite;
+  }
+  .bob {
+    animation: bob 1.6s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html[data-skip-loader] .loader {
+  display: none;
+}
+
+/* cursor de pena: esconde o nativo só quando o componente Cursor está ativo */
+html.has-ink-cursor,
+html.has-ink-cursor * {
+  cursor: none !important;
+}
+
+/* página 3D */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* rolagem horizontal sem barra (carrossel mobile) */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/*
+ * Impressão: tudo vira documento formal (usado pela página /curriculo).
+ * Papel branco, tinta preta, fonte de texto em tudo, sem bordas desenhadas, retículas ou sombras.
+ */
+/* folha virando em tiras flexíveis (PageBend): a versão rígida some enquanto isso */
+[data-bending] > [data-rigid] {
+  visibility: hidden;
+}
+
+/* enquanto a espada está fincada em um link da contracapa, a do cursor some */
+html[data-stab] .cursor-nib {
+  visibility: hidden;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 9mm;
+  }
+  :root,
+  :root[data-page],
+  :root[data-ink] {
+    --paper: #fff !important;
+    --paper-shade: #fff !important;
+    --ink: #000 !important;
+    --accent: #c2182b !important;
+    --accent-text: #c2182b !important;
+    --on-accent: #fff !important;
+    --ff-bubble: var(--ff-body) !important;
+    color-scheme: light !important;
+  }
+  /* tudo que usa rem encolhe junto: o currículo cabe em uma folha */
+  html {
+    font-size: 12.6px !important;
+  }
+  html,
+  body {
+    background: #fff !important;
+    background-image: none !important;
+  }
+  /* a faixa preta e os detalhes vermelhos saem mesmo com "gráficos de fundo" desligado */
+  .cv-sheet,
+  .cv-sheet * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .ink-border,
+  .speed-lines,
+  .screentone,
+  .screentone-hatch,
+  .screentone-cross {
+    display: none !important;
+  }
+  .shadow-panel,
+  .shadow-lift,
+  .shadow-bubble {
+    box-shadow: none !important;
+  }
+  .font-bubble {
+    letter-spacing: 0.02em;
+  }
+}
