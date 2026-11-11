@@ -1,0 +1,262 @@
+'use client';
+
+import { useCallback, useRef, useState, useSyncExternalStore } from 'react';
+import dynamic from 'next/dynamic';
+import { AnimatePresence, motion, useInView } from 'framer-motion';
+import { skillsIntro, swords } from '@/lib/data/skills';
+import type { SkillSword } from '@/lib/data/skills';
+import { useFinePointer, useIsMobile } from '@/lib/hooks/useIsMobile';
+import { useReducedMotion } from '@/lib/hooks/useReducedMotion';
+import { useTheme } from '@/lib/hooks/useTheme';
+import { InkBorder, Onomatopoeia, Panel, ScreenTone } from '@/components/manga';
+import { cn } from '@/lib/cn';
+import { ChapterHeading } from './ChapterHeading';
+import { Swords2D } from './skills/Swords2D';
+
+// a cena 3D só é baixada no cliente e quando a seção chega perto da tela
+const SwordsScene = dynamic(() => import('@/components/three/SwordsScene'), { ssr: false });
+
+const noop = () => () => {};
+const useHydrated = () =>
+  useSyncExternalStore(
+    noop,
+    () => true,
+    () => false,
+  );
+
+let webgl: boolean | undefined;
+function hasWebGL() {
+  if (webgl === undefined) {
+    try {
+      const canvas = document.createElement('canvas');
+      webgl = !!(canvas.getContext('webgl2') || canvas.getContext('webgl'));
+    } catch {
+      webgl = false;
+    }
+  }
+  return webgl;
+}
+
+function isWeakDevice() {
+  const nav = navigator as Navigator & { deviceMemory?: number };
+  return (nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) <= 4;
+}
+
+const accentBg = { red: 'bg-(--spot)', orange: 'bg-(--spot-2)', blue: 'bg-(--spot-3)' } as const;
+const slotPos = ['left-3 sm:left-[5%]', 'left-1/2 -translate-x-1/2', 'right-3 sm:right-[5%]'];
+
+function SkillChips({ sword, detailed = false }: { sword: SkillSword; detailed?: boolean }) {
+  return (
+    <ul className="flex flex-wrap gap-1.5">
+      {sword.skills.map((skill) => (
+        <li
+          key={skill.name}
+          className="font-bubble bg-paper border-2 border-(--ink) px-2 py-1 text-[0.7rem]"
+        >
+          {skill.name}
+          {detailed && skill.note && <span className="opacity-70"> · {skill.note}</span>}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Cap. 2: três espadas, três áreas. 3D (R3F) quando o aparelho aguenta, SVG 2D como base e fallback. */
+export function Skills() {
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [ready3D, setReady3D] = useState(false);
+
+  const stage = useRef<HTMLDivElement>(null);
+  const near = useInView(stage, { margin: '500px 0px', once: true });
+  const visible = useInView(stage, { margin: '100px 0px' });
+
+  const hydrated = useHydrated();
+  const reduced = useReducedMotion();
+  const mobile = useIsMobile();
+  const finePointer = useFinePointer();
+  const theme = useTheme();
+
+  const weakMobile = hydrated && mobile && isWeakDevice();
+  const use3D = hydrated && !reduced && !weakMobile && hasWebGL();
+  const show3D = use3D && ready3D;
+
+  const toggle = useCallback((id: string) => setSelected((cur) => (cur === id ? null : id)), []);
+  const onReady = useCallback(() => setReady3D(true), []);
+
+  const hoveredSword = swords.find((s) => s.id === hovered && s.id !== selected);
+  const selectedSword = swords.find((s) => s.id === selected);
+  const selectedIndex = swords.findIndex((s) => s.id === selected);
+
+  return (
+    <section
+      id="habilidades"
+      tabIndex={-1}
+      aria-labelledby="habilidades-titulo"
+      className="relative px-(--space-page) py-24 outline-none"
+    >
+      <ChapterHeading
+        id="habilidades-titulo"
+        kicker={skillsIntro.kicker}
+        title={skillsIntro.title}
+        lead={hydrated && !finePointer ? skillsIntro.leadTouch : skillsIntro.lead}
+      />
+
+      <div className="relative mt-8">
+        <Panel seed={51} weight={6} shadow className="h-[62svh] max-h-[46rem] min-h-[24rem]">
+          <div ref={stage} className="absolute inset-0">
+            <ScreenTone size={9} dot={20} fade="down" opacity={0.28} />
+            <div
+              className={cn(
+                'absolute inset-0 transition-opacity duration-500',
+                show3D && 'opacity-0',
+              )}
+              aria-hidden={show3D}
+            >
+              {[true, false].map((compact) => (
+                <Swords2D
+                  key={String(compact)}
+                  compact={compact}
+                  className={compact ? 'md:hidden' : 'hidden md:block'}
+                  swords={swords}
+                  hovered={hovered}
+                  selected={selected}
+                  onHover={setHovered}
+                  onSelect={toggle}
+                />
+              ))}
+            </div>
+            {use3D && near && (
+              <div
+                className={cn(
+                  'absolute inset-0 transition-opacity duration-500',
+                  show3D ? 'opacity-100' : 'opacity-0',
+                  hovered && 'cursor-pointer',
+                )}
+              >
+                <SwordsScene
+                  swords={swords}
+                  hovered={hovered}
+                  selected={selected}
+                  onHover={setHovered}
+                  onSelect={toggle}
+                  theme={theme}
+                  lite={mobile}
+                  active={visible}
+                  onReady={onReady}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* painel rápido do hover */}
+          <AnimatePresence>
+            {hoveredSword && (
+              <motion.div
+                key={hoveredSword.id}
+                initial={{ opacity: 0, y: -10, scale: 0.92 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.16 }}
+                className={cn(
+                  'bg-paper pointer-events-none absolute top-3 z-(--z-bubble) w-[min(17rem,calc(100%-1.5rem))] p-3 sm:top-5',
+                  slotPos[swords.indexOf(hoveredSword)],
+                )}
+              >
+                <p className="font-bubble text-[0.65rem] opacity-70">{hoveredSword.area}</p>
+                <p className="font-display mb-2 text-base leading-tight">{hoveredSword.name}</p>
+                <SkillChips sword={hoveredSword} />
+                <InkBorder seed={52} weight={3} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {hoveredSword && (
+            <div className="pointer-events-none absolute right-6 bottom-6 hidden sm:block">
+              <Onomatopoeia
+                key={hoveredSword.id}
+                text={hoveredSword.sfx}
+                size="3.2rem"
+                tone="accent"
+              />
+            </div>
+          )}
+        </Panel>
+
+        {/* plaquinhas: controle por teclado/toque e legenda de cada espada */}
+        <ul className="mt-5 grid grid-cols-3 gap-2 sm:gap-(--space-gutter)">
+          {swords.map((sword) => {
+            const on = selected === sword.id;
+            return (
+              <li key={sword.id}>
+                <button
+                  type="button"
+                  aria-pressed={on}
+                  aria-controls="espada-detalhe"
+                  onClick={() => toggle(sword.id)}
+                  onPointerEnter={() => setHovered(sword.id)}
+                  onPointerLeave={() => setHovered(null)}
+                  onFocus={() => setHovered(sword.id)}
+                  onBlur={() => setHovered(null)}
+                  className={cn(
+                    'relative flex h-full w-full flex-col items-start gap-1 border-[3px] border-(--ink) p-2.5 text-left transition-colors sm:p-4',
+                    on ? 'bg-ink text-paper' : 'bg-paper text-ink hover:bg-paper-shade',
+                  )}
+                >
+                  <span
+                    aria-hidden
+                    className={cn(
+                      'h-2 w-8 border-2 border-(--ink)',
+                      accentBg[sword.accent],
+                      on && 'border-(--paper)',
+                    )}
+                  />
+                  <span className="font-display text-sm leading-tight sm:text-lg">
+                    {sword.area}
+                  </span>
+                  <span className="font-bubble text-[0.65rem] opacity-80 sm:text-xs">
+                    {sword.name}
+                  </span>
+                  <span className="sr-only">{on ? '(empunhada)' : '(fincada no chão)'}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+
+        {/* painel detalhado da espada empunhada */}
+        <div id="espada-detalhe" aria-live="polite">
+          <AnimatePresence mode="wait">
+            {selectedSword && (
+              <motion.div
+                key={selectedSword.id}
+                initial={{ opacity: 0, scale: 0.9, y: 16 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+                className={cn(
+                  'bg-paper shadow-panel relative z-(--z-bubble) mt-5 p-5 sm:p-6 lg:absolute lg:top-5 lg:mt-0 lg:w-[23rem]',
+                  selectedIndex === 2 ? 'lg:left-5' : 'lg:right-5',
+                )}
+              >
+                <p className="font-bubble text-xs opacity-70">{selectedSword.name}</p>
+                <h3 className="mb-2 text-2xl">{selectedSword.area}</h3>
+                <p className="font-bubble mb-3 text-[0.8rem]">“{selectedSword.motto}”</p>
+                <p className="mb-4 text-sm">{selectedSword.description}</p>
+                <SkillChips sword={selectedSword} detailed />
+                <button
+                  type="button"
+                  onClick={() => setSelected(null)}
+                  className="font-bubble bg-ink text-paper mt-5 px-3 py-2 text-xs"
+                >
+                  Fincar de volta ↓
+                </button>
+                <InkBorder seed={53} weight={4} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </section>
+  );
+}
