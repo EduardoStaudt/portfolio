@@ -27,6 +27,9 @@ export const skillsIntro = {
   title: 'Habilidades',
   lead: 'Três lâminas fincadas no campo. Passe o mouse para senti-las, clique para empunhar.',
   leadTouch: 'Três lâminas fincadas no campo. Toque em uma para empunhar.',
+  /** ficha ao lado do campo, enquanto nenhuma espada está empunhada */
+  emptyTitle: 'Nenhuma lâmina empunhada',
+  emptyText: 'Clique em uma espada para abrir a ficha completa dela.',
 };
 
 export const swords: SkillSword[] = [
@@ -38,14 +41,14 @@ export const swords: SkillSword[] = [
     accent: 'blue',
     motto: 'Corta interface com precisão de um pixel.',
     description:
-      'A espada leve, de quem constrói o que as pessoas veem e tocam: interfaces web, jogos e a arte que vai dentro deles.',
+      'A espada leve, de quem constrói o que as pessoas veem e tocam: aplicativos e sites, jogos e a arte que vai dentro deles.',
     skills: [
-      { name: 'Next.js' },
-      { name: 'React' },
+      { name: 'Flutter (Dart)', note: 'web e mobile' },
+      { name: 'Next.js / React', note: 'este portfólio' },
       { name: 'TypeScript' },
       { name: 'Tailwind CSS' },
       { name: 'Godot / GDScript', note: 'jogos' },
-      { name: 'Pixel art', note: 'sprites e animação' },
+      { name: 'Pixel art', note: 'sprites' },
     ],
     sfx: 'シャキン',
   },
@@ -60,10 +63,12 @@ export const swords: SkillSword[] = [
       'Minha arma principal: modelar o mundo com dados. Da rede neural clássica às redes informadas por física, sempre com método científico.',
     skills: [
       { name: 'Python' },
-      { name: 'Redes neurais' },
+      { name: 'TensorFlow / Keras' },
+      { name: 'PyTorch' },
+      { name: 'NumPy / Pandas' },
+      { name: 'ONNX Runtime' },
       { name: 'PINNs', note: 'em estudo' },
       { name: 'Pesquisa científica' },
-      { name: 'LaTeX' },
     ],
     sfx: 'ズバァン',
   },
@@ -75,13 +80,14 @@ export const swords: SkillSword[] = [
     accent: 'orange',
     motto: 'Curta, firme e confiável. A fundação de tudo.',
     description:
-      'A espada da base: lógica de baixo nível, estruturas bem pensadas e as ferramentas que mantêm um projeto de pé.',
+      'A espada da base: APIs, banco de dados, lógica de baixo nível e as ferramentas que mantêm um projeto de pé.',
     skills: [
-      { name: 'C' },
+      { name: 'Java', note: 'orientação a objetos' },
+      { name: 'FastAPI', note: 'API REST' },
+      { name: 'SQL / Supabase' },
+      { name: 'C e Assembly' },
       { name: 'Estruturas de dados' },
       { name: 'Git / GitHub' },
-      { name: 'UML' },
-      { name: 'Notion API' },
     ],
     sfx: 'ガキン',
   },

@@ -61,7 +61,7 @@ function SkillChips({ sword, detailed = false }: { sword: SkillSword; detailed?:
   );
 }
 
-/** Cap. 2: três espadas, três áreas. 3D (R3F) quando o aparelho aguenta, SVG 2D como base e fallback. */
+/** Cap. 3: três espadas, três áreas. 3D (R3F) quando o aparelho aguenta, SVG 2D como base e fallback. */
 export function Skills() {
   const [hovered, setHovered] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
@@ -86,7 +86,6 @@ export function Skills() {
 
   const hoveredSword = swords.find((s) => s.id === hovered && s.id !== selected);
   const selectedSword = swords.find((s) => s.id === selected);
-  const selectedIndex = swords.findIndex((s) => s.id === selected);
 
   return (
     <section
@@ -102,130 +101,132 @@ export function Skills() {
         lead={hydrated && !finePointer ? skillsIntro.leadTouch : skillsIntro.lead}
       />
 
-      <div className="relative mt-8">
-        <Panel seed={51} weight={6} shadow className="h-[62svh] max-h-[46rem] min-h-[24rem]">
-          <div ref={stage} className="absolute inset-0">
-            <ScreenTone size={9} dot={20} fade="down" opacity={0.28} />
-            <div
-              className={cn(
-                'absolute inset-0 transition-opacity duration-500',
-                show3D && 'opacity-0',
-              )}
-              aria-hidden={show3D}
-            >
-              {[true, false].map((compact) => (
-                <Swords2D
-                  key={String(compact)}
-                  compact={compact}
-                  className={compact ? 'md:hidden' : 'hidden md:block'}
-                  swords={swords}
-                  hovered={hovered}
-                  selected={selected}
-                  onHover={setHovered}
-                  onSelect={toggle}
-                />
-              ))}
-            </div>
-            {use3D && near && (
+      <div className="relative mt-8 lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-(--space-gutter)">
+        <div className="min-w-0">
+          <Panel seed={51} weight={6} shadow className="h-[62svh] max-h-[46rem] min-h-[24rem]">
+            <div ref={stage} className="absolute inset-0">
+              <ScreenTone size={9} dot={20} fade="down" opacity={0.28} />
               <div
                 className={cn(
-                  'absolute inset-0 transition-opacity duration-500',
-                  show3D ? 'opacity-100' : 'opacity-0',
-                  hovered && 'cursor-pointer',
+                  'absolute inset-0 transition-opacity duration-150',
+                  show3D && 'opacity-0',
                 )}
+                aria-hidden={show3D}
               >
-                <SwordsScene
-                  swords={swords}
-                  hovered={hovered}
-                  selected={selected}
-                  onHover={setHovered}
-                  onSelect={toggle}
-                  theme={theme}
-                  lite={mobile}
-                  active={visible}
-                  onReady={onReady}
+                {[true, false].map((compact) => (
+                  <Swords2D
+                    key={String(compact)}
+                    compact={compact}
+                    className={compact ? 'md:hidden' : 'hidden md:block'}
+                    swords={swords}
+                    hovered={hovered}
+                    selected={selected}
+                    onHover={setHovered}
+                    onSelect={toggle}
+                  />
+                ))}
+              </div>
+              {use3D && near && (
+                <div
+                  className={cn(
+                    'absolute inset-0 transition-opacity delay-150 duration-500',
+                    show3D ? 'opacity-100' : 'opacity-0',
+                    hovered && 'cursor-pointer',
+                  )}
+                >
+                  <SwordsScene
+                    swords={swords}
+                    hovered={hovered}
+                    selected={selected}
+                    onHover={setHovered}
+                    onSelect={toggle}
+                    theme={theme}
+                    lite={mobile}
+                    active={visible}
+                    onReady={onReady}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* painel rápido do hover */}
+            <AnimatePresence>
+              {hoveredSword && (
+                <motion.div
+                  key={hoveredSword.id}
+                  initial={{ opacity: 0, y: -10, scale: 0.92 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.16 }}
+                  className={cn(
+                    'bg-paper pointer-events-none absolute top-3 z-(--z-bubble) w-[min(17rem,calc(100%-1.5rem))] p-3 sm:top-5',
+                    slotPos[swords.indexOf(hoveredSword)],
+                  )}
+                >
+                  <p className="font-bubble text-[0.65rem] opacity-70">{hoveredSword.area}</p>
+                  <p className="font-display mb-2 text-base leading-tight">{hoveredSword.name}</p>
+                  <SkillChips sword={hoveredSword} />
+                  <InkBorder seed={52} weight={3} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {hoveredSword && (
+              <div className="pointer-events-none absolute right-6 bottom-6 hidden sm:block">
+                <Onomatopoeia
+                  key={hoveredSword.id}
+                  text={hoveredSword.sfx}
+                  size="3.2rem"
+                  tone="accent"
                 />
               </div>
             )}
-          </div>
+          </Panel>
 
-          {/* painel rápido do hover */}
-          <AnimatePresence>
-            {hoveredSword && (
-              <motion.div
-                key={hoveredSword.id}
-                initial={{ opacity: 0, y: -10, scale: 0.92 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.16 }}
-                className={cn(
-                  'bg-paper pointer-events-none absolute top-3 z-(--z-bubble) w-[min(17rem,calc(100%-1.5rem))] p-3 sm:top-5',
-                  slotPos[swords.indexOf(hoveredSword)],
-                )}
-              >
-                <p className="font-bubble text-[0.65rem] opacity-70">{hoveredSword.area}</p>
-                <p className="font-display mb-2 text-base leading-tight">{hoveredSword.name}</p>
-                <SkillChips sword={hoveredSword} />
-                <InkBorder seed={52} weight={3} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {hoveredSword && (
-            <div className="pointer-events-none absolute right-6 bottom-6 hidden sm:block">
-              <Onomatopoeia
-                key={hoveredSword.id}
-                text={hoveredSword.sfx}
-                size="3.2rem"
-                tone="accent"
-              />
-            </div>
-          )}
-        </Panel>
-
-        {/* plaquinhas: controle por teclado/toque e legenda de cada espada */}
-        <ul className="mt-5 grid grid-cols-3 gap-2 sm:gap-(--space-gutter)">
-          {swords.map((sword) => {
-            const on = selected === sword.id;
-            return (
-              <li key={sword.id}>
-                <button
-                  type="button"
-                  aria-pressed={on}
-                  aria-controls="espada-detalhe"
-                  onClick={() => toggle(sword.id)}
-                  onPointerEnter={() => setHovered(sword.id)}
-                  onPointerLeave={() => setHovered(null)}
-                  onFocus={() => setHovered(sword.id)}
-                  onBlur={() => setHovered(null)}
-                  className={cn(
-                    'relative flex h-full w-full flex-col items-start gap-1 border-[3px] border-(--ink) p-2.5 text-left transition-colors sm:p-4',
-                    on ? 'bg-ink text-paper' : 'bg-paper text-ink hover:bg-paper-shade',
-                  )}
-                >
-                  <span
-                    aria-hidden
+          {/* plaquinhas: controle por teclado/toque e legenda de cada espada */}
+          <ul className="mt-5 grid grid-cols-3 gap-2 sm:gap-(--space-gutter)">
+            {swords.map((sword) => {
+              const on = selected === sword.id;
+              return (
+                <li key={sword.id}>
+                  <button
+                    type="button"
+                    aria-pressed={on}
+                    aria-controls="espada-detalhe"
+                    onClick={() => toggle(sword.id)}
+                    onPointerEnter={() => setHovered(sword.id)}
+                    onPointerLeave={() => setHovered(null)}
+                    onFocus={() => setHovered(sword.id)}
+                    onBlur={() => setHovered(null)}
                     className={cn(
-                      'h-2 w-8 border-2 border-(--ink)',
-                      accentBg[sword.accent],
-                      on && 'border-(--paper)',
+                      'relative flex h-full w-full flex-col items-start gap-1 border-[3px] border-(--ink) p-2.5 text-left transition-colors sm:p-4',
+                      on ? 'bg-ink text-paper' : 'bg-paper text-ink hover:bg-paper-shade',
                     )}
-                  />
-                  <span className="font-display text-sm leading-tight sm:text-lg">
-                    {sword.area}
-                  </span>
-                  <span className="font-bubble text-[0.65rem] opacity-80 sm:text-xs">
-                    {sword.name}
-                  </span>
-                  <span className="sr-only">{on ? '(empunhada)' : '(fincada no chão)'}</span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+                  >
+                    <span
+                      aria-hidden
+                      className={cn(
+                        'h-2 w-8 border-2 border-(--ink)',
+                        accentBg[sword.accent],
+                        on && 'border-(--paper)',
+                      )}
+                    />
+                    <span className="font-display text-sm leading-tight sm:text-lg">
+                      {sword.area}
+                    </span>
+                    <span className="font-bubble text-[0.65rem] opacity-80 sm:text-xs">
+                      {sword.name}
+                    </span>
+                    <span className="sr-only">{on ? '(empunhada)' : '(fincada no chão)'}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
 
-        {/* painel detalhado da espada empunhada */}
-        <div id="espada-detalhe" aria-live="polite">
+        {/* ficha da espada empunhada: ao lado do campo no desktop, abaixo no celular */}
+        <div id="espada-detalhe" aria-live="polite" className="lg:h-full">
           <AnimatePresence mode="wait">
             {selectedSword && (
               <motion.div
@@ -234,10 +235,7 @@ export function Skills() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ type: 'spring', stiffness: 320, damping: 24 }}
-                className={cn(
-                  'bg-paper shadow-panel relative z-(--z-bubble) mt-5 p-5 sm:p-6 lg:absolute lg:top-5 lg:mt-0 lg:w-[23rem]',
-                  selectedIndex === 2 ? 'lg:left-5' : 'lg:right-5',
-                )}
+                className="bg-paper shadow-panel relative mt-5 p-5 sm:p-6 lg:mt-0"
               >
                 <p className="font-bubble text-xs opacity-70">{selectedSword.name}</p>
                 <h3 className="mb-2 text-2xl">{selectedSword.area}</h3>
@@ -252,6 +250,33 @@ export function Skills() {
                   Fincar de volta ↓
                 </button>
                 <InkBorder seed={53} weight={4} />
+              </motion.div>
+            )}
+            {!selectedSword && (
+              <motion.div
+                key="vazio"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="relative hidden flex-col gap-4 border-[3px] border-dashed border-(--ink) p-6 lg:flex"
+              >
+                <p className="font-display text-xl leading-tight">{skillsIntro.emptyTitle}</p>
+                <p className="text-sm opacity-80">{skillsIntro.emptyText}</p>
+                <ul className="flex flex-col gap-3">
+                  {swords.map((sword) => (
+                    <li key={sword.id}>
+                      <p className="font-bubble mb-1.5 flex items-center gap-2 text-xs">
+                        <span
+                          aria-hidden
+                          className={cn('h-2 w-6 border-2 border-(--ink)', accentBg[sword.accent])}
+                        />
+                        {sword.area}
+                      </p>
+                      <SkillChips sword={sword} />
+                    </li>
+                  ))}
+                </ul>
               </motion.div>
             )}
           </AnimatePresence>
