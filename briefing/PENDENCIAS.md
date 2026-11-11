@@ -13,10 +13,14 @@ O que depende de você, Eduardo. Quase tudo se resolve editando `lib/data/`.
 - [ ] **"Tapys"**: esse nome não aparecia em nenhum lugar do site, então não havia o que trocar. Se ele está ligado a algum texto que existe (o Glazzy, por exemplo), me diga qual.
 - [ ] **LAMIA**: o nome também não aparecia. Tirei a única coisa ligada a ele, o quadro do "bootcamp de ML" no Cap. 1, e coloquei no lugar um quadro sobre projetos da faculdade (Batalha Naval em Assembly, GymSolver, benchmark de ordenação). O bootcamp também ficou fora do currículo.
 - [ ] **Duelo de cartas**: segui o prompt do minijogo, que pede dois personagens originais (o Mangaká e o Ronin Rubro) em vez de personagens de anime. O labirinto antigo saiu.
-- [ ] **Vitória no duelo**: conta como 4º segredo no contador, mas é bônus: a página secreta abre com os três primeiros e mostra o selo "Duelista" para quem venceu. Se preferir que a vitória seja obrigatória, tire `optional: true` do item `duelo` em `lib/data/eggs.ts`.
+- [ ] **Vitória no duelo**: é bônus e não entra no contador, que vai de 0 a 3. A página secreta abre com os três segredos e mostra o selo "Duelista" para quem venceu. Se preferir que a vitória conte, tire `optional: true` do item `duelo` em `lib/data/eggs.ts`.
 - [ ] **"Em vez de vrrrum, eduardo"**: fiz as duas leituras: a palavra a digitar agora é `eduardo`, e o grito na tela é "EDUARDO!!" (o VRRRUM ficou menor, ao fundo).
 - [ ] **Página "Em breve"**: ficou vazia de propósito, só com o desenho. A continuação com PINNs virou o quadro "Parte 2 · Em desenvolvimento" dentro do NNAdsorption. O texto desse quadro (`next` em `lib/data/projects.ts`) fui eu que escrevi: revise.
-- [ ] **Imagem do currículo**: a imagem de como o currículo estava ficando não chegou até mim (só veio a do grimório). Refiz o layout e conferi gerando o PDF: uma página em A4 e em Carta.
+- [ ] **Currículo impresso**: a versão de impressão agora é formal (preto no branco, sem logo, faixa ou etiquetas); a ficha temática ficou só na tela. Conferi gerando o PDF: uma página em A4 e em Carta.
+- [ ] **Portfólio no currículo**: o projeto entrou sem link. Quando você tiver o endereço, defina `NEXT_PUBLIC_SITE_URL` (ou troque `site.url` em `lib/data/site.ts`) e o link aparece sozinho.
+- [ ] **Glazzy no currículo**: usei o mesmo texto curto do site ("ERP para vidraçarias, do orçamento à entrega") e a stack ficou só como "Web". Me passe as tecnologias reais.
+- [ ] **Técnico em Administração**: entrou como quadro no Cap. 1 e na formação do currículo. Faltam o nome da escola e o ano. O balão de pensamento ("Foi ali que comecei a entender como um negócio funciona") fui eu que escrevi: revise.
+- [ ] **Quadro da faculdade (Cap. 1)**: juntei os quadros do notebook e da pixel art em um só. A frase nova é "E nos jogos da faculdade, os sprites em pixel art ficam comigo". Ainda há "desenho pixel por pixel" no primeiro quadro, "pixel artist" na descrição do site e "Pixel art 88" no grimório: não mexi.
 
 ## 3. Textos que eu escrevi sem ter a informação
 
@@ -24,15 +28,18 @@ O que depende de você, Eduardo. Quase tudo se resolve editando `lib/data/`.
 - [ ] **Resumo do currículo** (`lib/data/cv.ts`): reescrevi a versão da Blip de forma generalista. Revise o tom.
 - [ ] **Equilíbrio do duelo**: os valores das cartas são os do seu prompt. Em simulação, quem joga bem vence o Fácil quase sempre e o Difícil na maioria das vezes; não testei com pessoas.
 - [ ] **Lattes**: o PDF tinha o link, mas eu não tenho a URL. Não entrou no currículo.
-- [ ] **Links por projeto no currículo**: o PDF tinha "GitHub" em GymSolver, Batalha Naval, ordenação e na IC. Sem as URLs dos repositórios, ficaram sem link; o cabeçalho aponta para o seu perfil.
+- [x] **Links por projeto no currículo**: GymSolver, Batalha Naval e ordenação apontam para os repositórios que você passou. A IC continua sem link.
 - [ ] **Linha do tempo** (`lib/data/research.ts`): só o CNMAC tem ano. A ordem (OBMEP → IC → SICITE → CNMAC) é suposição, e o SICITE não aparece no seu currículo: confirme se você apresentou lá ou remova o item.
-- [ ] **Habilidades das espadas** (`lib/data/skills.ts`): vieram do briefing original (Next.js, C, UML...) e não batem com as competências do currículo (Python, Java, Flutter, TensorFlow...). Não mexi porque você não pediu.
+- [ ] **Habilidades das espadas** (`lib/data/skills.ts`): você pediu "corrija o habilidades" sem dizer o quê. Fiz duas coisas: alinhei as habilidades com o currículo (entraram Flutter, TensorFlow/Keras, PyTorch, NumPy/Pandas, ONNX Runtime, Java, FastAPI, SQL/Supabase, Assembly; saíram UML, Notion API e LaTeX) e tirei a ficha de cima do campo (ela cobria uma das espadas; agora fica ao lado). Se o problema era outro, me diga.
 - [ ] **Ficha do grimório** (`lib/data/eggs.ts`): os números dos atributos e a classe são inventados.
 
 ## 4. Decisões que tomei
 
 - OBMEP agora só aparece em dois lugares: um item curto na linha do tempo e uma linha no currículo, sem o "5". Saiu do Cap. 1 e do grimório.
-- A capa abre para a direita (lombada à direita), como mangá. O page flip dos projetos continua no sentido ocidental. As duas viradas agora curvam a folha.
+- A capa e o livro de projetos abrem para a direita (lombada à direita), como mangá, e as viradas curvam a folha. No livro, o desenho fica na página direita e o texto na esquerda. As setas ← → continuam significando anterior/próximo.
+- O site abre no modo escuro e colorido para quem ainda não escolheu; a preferência do sistema operacional não é mais consultada. A escolha feita nos botões continua salva.
+- O balão "Meu plano?" do último quadro do Cap. 1 quebra ao ser clicado e revela "Empreender!". Com movimento reduzido, a troca é direta.
+- O aviso "Role para abrir a capa" ficou cerca de 4 vezes maior.
 - Clicar em um link da contracapa atrasa a abertura em meio segundo para a espada fincar. Com Ctrl/Shift/botão do meio ou movimento reduzido, o link abre na hora.
 - O grimório usa vermelho e preto fixos, inclusive no modo P&B.
 - O Vitest roda com `pool: 'vmThreads'`: os pools padrão falham no Windows quando o terminal está em `c:\` minúsculo.

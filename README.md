@@ -35,14 +35,15 @@ app/
   page.tsx              a home: as seis seções em ordem
   globals.css           lê os tokens como CSS variables; utilidades de mangá, keyframes e impressão
   not-found.tsx         404 "Esse capítulo ainda não foi desenhado"
-  curriculo/page.tsx    currículo no estilo do site, formal ao imprimir
+  curriculo/page.tsx    currículo: ficha no estilo do site na tela, documento formal ao imprimir
   segredo/page.tsx      página secreta (abre ao achar todos os easter eggs)
   opengraph-image.tsx   imagem Open Graph gerada no build
   sitemap.ts, robots.ts
 styles/tokens.ts        cores, tipografia, espaçamento, bordas, sombras, z-index, durações
 components/
   manga/                Panel, PanelGrid, SpeechBubble, ThoughtBubble, Caption, Onomatopoeia,
-                        ScreenTone, SpeedLines, InkBorder, PageFlip, PageBend (folha flexível)
+                        ScreenTone, SpeedLines, InkBorder, PageFlip, PageBend (folha flexível),
+                        BreakBubble (balão que quebra ao clicar)
   manga/illustrations/  desenhos em SVG do Cap. 1 e dos projetos
   sections/             Cover, About, Projects, Skills, Research, Contact
   three/                SwordsScene, Sword (modelos procedurais), toon (shaders)
@@ -55,6 +56,8 @@ components/
 lib/
   data/                 TODO o conteúdo do site (textos, projetos, links, currículo)
   card-duel/            types, cards (dados), engine (regras puras), ai, engine.test
+  theme.ts              tema padrão e script que aplica a escolha salva antes da primeira pintura
+  pixel-store.ts        pixel art compartilhada entre o ateliê secreto e o Cap. 1
   hooks/                useKeySequence, useReducedMotion, useIsMobile, useMediaQuery, useTheme
 public/logo.svg         a logo
 briefing/               logo original e PENDENCIAS.md
@@ -82,7 +85,9 @@ Ficam em `lib/data/site.ts`. Um valor que comece com `TODO_` é tratado como pen
 
 ### Currículo
 
-A página `/curriculo` lê `lib/data/cv.ts`. É uma "ficha do protagonista": faixa preta com o nome, coluna lateral (formação, competências, honrarias) e coluna principal (resumo, experiência, projetos). O botão "Imprimir / salvar em PDF" abre a impressão do navegador. A folha impressa mantém o mesmo desenho, sem retículas nem sombras, e cabe em uma página A4. As regras ficam no bloco `@media print` de `app/globals.css`; a linha `font-size` do `html` ali dentro controla a escala: diminua se o conteúdo crescer e passar de uma folha.
+A página `/curriculo` lê `lib/data/cv.ts`. Na tela é uma "ficha do protagonista": faixa com o nome, coluna lateral (formação, competências, honrarias) e coluna principal (resumo, experiência, projetos). O botão "Imprimir / salvar em PDF" abre a impressão do navegador, e a folha impressa é um documento formal: preto no branco, uma fonte só, sem logo, faixas ou etiquetas, em uma página A4. As regras ficam nas classes `print:` da página e no bloco `@media print` de `app/globals.css`; a linha `font-size` do `html` ali dentro controla a escala: diminua se o conteúdo crescer e passar de uma folha.
+
+Cada projeto do currículo aceita uma lista `links`. O do portfólio entra sozinho quando `site.url` deixar de ser placeholder.
 
 ### Adicionar um projeto
 
@@ -104,20 +109,24 @@ A logo aparece no header, na capa, no loader, no rodapé, no currículo, no favi
 
 ## Temas
 
-- **P&B** (padrão) e **colorido**: botão no header. No P&B os acentos apontam para a própria tinta; no colorido acendem vermelho, laranja e azul.
-- **Página invertida** (dark): segue o sistema e pode ser trocada no header.
+- **Colorido** (padrão) e **P&B**: botão no header. No colorido acendem vermelho, laranja e azul; no P&B os acentos apontam para a própria tinta.
+- **Página escura** (padrão) e **clara**: botão no header. O padrão de quem ainda não escolheu fica em `DEFAULT_THEME`, em `lib/theme.ts`.
 - As cores vivem em `styles/tokens.ts` (`palette` e os temas). O layout gera as CSS variables a partir dali.
 
 ## Comportamento por tela
 
-| Seção              | Desktop (≥ 1024px)                               | Mobile / `prefers-reduced-motion`                                |
-| ------------------ | ------------------------------------------------ | ---------------------------------------------------------------- |
-| Capa               | abre com o scroll, para a direita, curvando-se   | no mobile abre igual; sem movimento, capa e sumário em sequência |
-| Cap. 1 Quem sou    | scroll vertical move a tira para o lado          | quadros empilhados (webtoon)                                     |
-| Cap. 2 Projetos    | página dupla; a folha se curva ao virar          | deslizar para o lado (scroll-snap)                               |
-| Cap. 3 Habilidades | cena 3D                                          | 3D leve no celular; SVG 2D em aparelho fraco ou sem movimento    |
-| Cap. 4 Pesquisa    | os quadros entram deslizando das laterais        | só aparecem (fade)                                               |
-| Contracapa         | o cursor vira espada e finca nos links ao clicar | no toque a espada também finca; sem movimento, link normal       |
+| Seção              | Desktop (≥ 1024px)                                 | Mobile / `prefers-reduced-motion`                                |
+| ------------------ | -------------------------------------------------- | ---------------------------------------------------------------- |
+| Capa               | abre com o scroll, para a direita, curvando-se     | no mobile abre igual; sem movimento, capa e sumário em sequência |
+| Cap. 1 Quem sou    | scroll vertical move a tira para o lado            | quadros empilhados (webtoon)                                     |
+| Cap. 2 Projetos    | página dupla em sentido de mangá; a folha se curva | deslizar para o lado (scroll-snap)                               |
+| Cap. 3 Habilidades | cena 3D                                            | 3D leve no celular; SVG 2D em aparelho fraco ou sem movimento    |
+| Cap. 4 Pesquisa    | os quadros entram deslizando das laterais          | só aparecem (fade)                                               |
+| Contracapa         | o cursor vira espada e finca nos links ao clicar   | no toque a espada também finca; sem movimento, link normal       |
+
+No livro de projetos o desenho fica na página direita (lida primeiro) e o texto na esquerda, e as folhas viram para a direita, como a capa. O texto dessas páginas cresce junto com o livro (tamanho em `cqh`/`cqw`).
+
+No Cap. 1, um balão pode ser uma "máscara": em `lib/data/about.ts`, um balão com `reveal` mostra `text`, quebra ao ser clicado e revela `reveal`.
 
 A capa e as folhas dos projetos viram como papel: enquanto a folha está no ar ela é trocada por uma versão cortada em tiras encadeadas (`components/manga/PageBend.tsx`), e cada tira gira um pouco mais que a anterior.
 
@@ -132,9 +141,9 @@ Ao trocar de capítulo rolando, a página dá um tremor leve. O corte diagonal d
 2. **Serra**: digite `eduardo` (ou toque 5 vezes rápido na logo do header). A tela treme, um corte de serra atravessa a página e o nome aparece gritado.
 3. **Grimório**: Konami code (↑ ↑ ↓ ↓ ← → ← → B A), ou o trevo discreto no canto da contracapa. O livro desce dentro de um círculo mágico; ao clicar, a capa vira em 3D e a ficha estilo RPG se preenche.
 
-4. **Duelista** (bônus): vencer o duelo de cartas.
+4. **Duelista** (bônus, fora do contador): vencer o duelo de cartas.
 
-O contador no header guarda o progresso no `localStorage`. Com os três primeiros, `/segredo` libera o omake: uma tirinha de 4 quadros, um mini editor de pixel art e o atalho para duelar de novo. Quem venceu o duelo ganha lá o selo "Duelista". Há também uma mensagem no console.
+O contador no header (de 0 a 3) guarda o progresso no `localStorage`. Com os três segredos, `/segredo` libera o omake: uma tirinha de 4 quadros, o ateliê de pixel art e o atalho para duelar de novo. O desenho feito no ateliê aparece na tela do notebook do Cap. 1 (os dois leem `lib/pixel-store.ts`). Quem venceu o duelo ganha lá o selo "Duelista". Há também uma mensagem no console.
 
 São homenagens com desenhos próprios: nenhum personagem, logo ou arte oficial é reproduzido.
 
