@@ -96,9 +96,7 @@ function StoryPanel({ panel, index }: { panel: AboutPanel; index: number }) {
               preserveAspectRatio="xMidYMid slice"
               className="pointer-events-none absolute inset-0 h-full w-full"
             >
-              <foreignObject x="157" y="127" width="76" height="50" className="overflow-visible">
-                <StrawHat className="pointer-events-auto block h-full w-full" />
-              </foreignObject>
+              <StrawHat x={157} y={127} width={76} height={50} />
             </svg>
           )}
         </div>

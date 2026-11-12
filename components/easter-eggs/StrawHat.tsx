@@ -2,18 +2,11 @@
 
 import { useEggContext } from './EasterEggProvider';
 import { emit } from '@/lib/bus';
-import { cn } from '@/lib/cn';
 
-/** Chapéu de palha genérico, desenho próprio. `blink`: pisca de leve (o chapéu clicável). */
-export function HatIcon({ className, blink = false }: { className?: string; blink?: boolean }) {
+/** O desenho do chapéu, em um viewBox de 46x30. */
+function HatShape() {
   return (
-    <svg
-      aria-hidden
-      width="46"
-      height="30"
-      viewBox="0 0 46 30"
-      className={cn(className, blink && 'soft-blink')}
-    >
+    <>
       <ellipse
         cx="23"
         cy="22"
@@ -43,27 +36,52 @@ export function HatIcon({ className, blink = false }: { className?: string; blin
         strokeWidth="1.2"
         strokeLinecap="round"
       />
+    </>
+  );
+}
+
+/** Chapéu de palha genérico, desenho próprio. */
+export function HatIcon({ className }: { className?: string }) {
+  return (
+    <svg aria-hidden width="46" height="30" viewBox="0 0 46 30" className={className}>
+      <HatShape />
     </svg>
   );
 }
 
+type Props = { x: number; y: number; width: number; height: number };
+
 /**
  * Homenagem a One Piece: o personagem do primeiro quadro do Cap. 1 usa um chapéu de palha.
  * Clique: "Tesouro encontrado!", o cursor estica como borracha e o aviso oferece o duelo de cartas.
+ *
+ * É um elemento SVG nativo, para ser desenhado dentro de um <svg> com o mesmo viewBox da
+ * ilustração: assim ele fica na cabeça do personagem em qualquer tela e navegador.
  */
-export function StrawHat({ className }: { className?: string }) {
+export function StrawHat({ x, y, width, height }: Props) {
   const { unlock } = useEggContext();
+  const find = () => {
+    unlock('tesouro', true);
+    emit('rubber', { ms: 6000 });
+  };
   return (
-    <button
-      type="button"
+    <g
+      role="button"
+      tabIndex={0}
       aria-label="O chapéu de palha do personagem"
-      onClick={() => {
-        unlock('tesouro', true);
-        emit('rubber', { ms: 6000 });
+      onClick={find}
+      onKeyDown={(e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        find();
       }}
-      className={cn('group transition-transform hover:-translate-y-0.5 hover:rotate-6', className)}
+      className="soft-blink pointer-events-auto cursor-pointer outline-none"
     >
-      <HatIcon blink className="h-full w-full" />
-    </button>
+      <svg x={x} y={y} width={width} height={height} viewBox="0 0 46 30" overflow="visible">
+        <HatShape />
+      </svg>
+      {/* área de toque um pouco maior que o desenho */}
+      <rect x={x - 4} y={y - 4} width={width + 8} height={height + 8} fill="transparent" />
+    </g>
   );
 }
