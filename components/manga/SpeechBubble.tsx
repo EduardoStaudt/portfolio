@@ -14,6 +14,11 @@ type Props = {
   seed?: number;
   /** atraso do "pop" em segundos */
   delay?: number;
+  /** cores do balão (valores CSS): fundo, texto e contorno; `weight` é a espessura do contorno */
+  fill?: string;
+  color?: string;
+  stroke?: string;
+  weight?: number;
   className?: string;
 };
 
@@ -24,7 +29,7 @@ const tailPos: Record<Exclude<Tail, 'none'>, string> = {
   tr: '-top-[18px] right-[18%] -scale-100',
 };
 
-function burst(seed: number) {
+export function burst(seed: number) {
   const rand = seeded(seed);
   const spikes = 22;
   const pts: string[] = [];
@@ -49,6 +54,10 @@ export function SpeechBubble({
   tail = 'bl',
   seed = 3,
   delay = 0,
+  fill = 'var(--paper)',
+  color,
+  stroke = 'var(--ink)',
+  weight = 2.5,
   className,
 }: Props) {
   const shout = variant === 'shout';
@@ -60,10 +69,13 @@ export function SpeechBubble({
         'font-bubble text-ink relative inline-block max-w-[19rem] text-center text-[0.95rem]',
         shout
           ? 'px-[2.6em] py-[2.2em]'
-          : 'bg-paper rounded-[46%_54%_52%_48%/56%_48%_52%_44%] border-[2.5px] border-(--ink) px-[1.7em] py-[1.25em]',
+          : 'rounded-[46%_54%_52%_48%/56%_48%_52%_44%] border-solid px-[1.7em] py-[1.25em]',
         variant === 'whisper' && 'border-dashed',
         className,
       )}
+      style={
+        shout ? { color } : { color, background: fill, borderColor: stroke, borderWidth: weight }
+      }
     >
       {shout && (
         <svg
@@ -74,9 +86,9 @@ export function SpeechBubble({
         >
           <polygon
             points={burst(seed)}
-            fill="var(--paper)"
-            stroke="var(--ink)"
-            strokeWidth={2.5}
+            fill={fill}
+            stroke={stroke}
+            strokeWidth={weight}
             strokeLinejoin="round"
             vectorEffect="non-scaling-stroke"
           />
@@ -91,12 +103,12 @@ export function SpeechBubble({
           viewBox="0 0 26 22"
           className={cn('absolute', tailPos[tail])}
         >
-          <path d="M2 2 C6 9 4 15 1 21 C10 17 18 10 23 2 Z" fill="var(--paper)" />
+          <path d="M2 2 C6 9 4 15 1 21 C10 17 18 10 23 2 Z" fill={fill} />
           <path
             d="M2.5 1 C6 9 4 15 1 21 C10 17 18 10 22.5 1"
             fill="none"
-            stroke="var(--ink)"
-            strokeWidth={2.5}
+            stroke={stroke}
+            strokeWidth={weight}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeDasharray={variant === 'whisper' ? '4 4' : undefined}

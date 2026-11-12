@@ -6,7 +6,7 @@ import { useReducedMotion } from '@/lib/hooks/useReducedMotion';
 import { round, seeded } from '@/lib/random';
 import { shakeScreen } from '@/lib/shake';
 import { cn } from '@/lib/cn';
-import { SpeechBubble } from './SpeechBubble';
+import { SpeechBubble, burst } from './SpeechBubble';
 
 type Props = {
   /** o que o balão mostra antes do clique (a "máscara") */
@@ -43,6 +43,7 @@ function shards(seed: number, n = 12): Shard[] {
 }
 
 const PIECES = shards(17);
+const OUTLINE = burst(11);
 
 /**
  * Balão-máscara: mostra uma pergunta; ao clicar, o balão estilhaça e revela a resposta.
@@ -63,9 +64,33 @@ export function BreakBubble({ text, reveal, tail = 'bl', delay = 0, className }:
   return (
     <div className={cn('relative', className)} aria-live="polite">
       {state === 'open' ? (
-        <SpeechBubble variant="shout" seed={11} className="text-[1.15rem]">
-          {reveal}
-        </SpeechBubble>
+        // resposta: explosão com contorno vermelho grosso, por cima de um contorno de nanquim
+        <div className="relative">
+          <svg
+            aria-hidden
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            className="absolute inset-0 h-full w-full scale-[1.07] overflow-visible"
+          >
+            <polygon
+              points={OUTLINE}
+              fill="var(--ink)"
+              stroke="var(--ink)"
+              strokeWidth={4}
+              strokeLinejoin="round"
+              vectorEffect="non-scaling-stroke"
+            />
+          </svg>
+          <SpeechBubble
+            variant="shout"
+            seed={11}
+            stroke="var(--accent)"
+            weight={7}
+            className="font-display text-[1.25rem]"
+          >
+            {reveal}
+          </SpeechBubble>
+        </div>
       ) : (
         <button
           type="button"
@@ -73,18 +98,19 @@ export function BreakBubble({ text, reveal, tail = 'bl', delay = 0, className }:
           aria-label={`${text} Clique para quebrar o balão e ver a resposta.`}
           className={cn(
             'group relative block cursor-pointer',
-            state === 'closed' && 'transition-transform hover:scale-105 hover:-rotate-2',
+            state === 'closed' && 'call-blink hover:[animation-play-state:paused]',
           )}
         >
           <SpeechBubble
             tail={tail}
             delay={delay}
+            fill="var(--accent)"
+            color="var(--on-accent)"
+            weight={3.5}
             className={cn('mb-4', state === 'breaking' && 'invisible')}
           >
             {text}
-            <span className="bob mt-1 block text-[0.62em] opacity-70 group-hover:opacity-100">
-              ▼ clique
-            </span>
+            <span className="bob mt-1 block text-[0.62em]">▼ clique</span>
           </SpeechBubble>
 
           {state === 'breaking' && (
@@ -99,7 +125,7 @@ export function BreakBubble({ text, reveal, tail = 'bl', delay = 0, className }:
                   <motion.polygon
                     key={i}
                     points={s.points}
-                    fill="var(--paper)"
+                    fill="var(--accent)"
                     stroke="var(--ink)"
                     strokeWidth={2}
                     strokeLinejoin="round"
