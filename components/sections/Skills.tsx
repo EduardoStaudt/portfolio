@@ -97,14 +97,15 @@ export function Skills() {
     >
       {/* o capítulo inteiro (título, campo, plaquinhas e ficha) cabe em uma tela */}
       <div className="relative flex flex-col gap-5 px-(--space-page) py-24 lg:h-svh lg:min-h-[36rem] lg:gap-3 lg:pt-[calc(var(--space-header)+0.25rem)] lg:pb-10 lg:motion-safe:sticky lg:motion-safe:top-0">
-        <div className="flex flex-col gap-2 lg:gap-1">
+        {/* desktop: selo e título na mesma linha; o texto começa alinhado com o título */}
+        <div className="flex flex-col gap-2 lg:grid lg:grid-cols-[auto_1fr] lg:items-center lg:gap-x-4 lg:gap-y-1">
           <ChapterHeading
             id="habilidades-titulo"
             kicker={skillsIntro.kicker}
             title={skillsIntro.title}
-            className="lg:flex-row lg:items-center lg:gap-4 lg:[&_h2]:text-(length:--fs-2xl)"
+            className="lg:contents lg:[&_h2]:text-(length:--fs-2xl)"
           />
-          <p className="max-w-xl text-base opacity-80 lg:max-w-none lg:text-sm">
+          <p className="max-w-xl text-base opacity-80 lg:col-start-2 lg:max-w-none lg:text-sm">
             {hydrated && !finePointer ? skillsIntro.leadTouch : skillsIntro.lead}
           </p>
         </div>
