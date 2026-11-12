@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import type { ReactNode } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { contact } from '@/lib/data/contact';
 import { isTodo, links, site } from '@/lib/data/site';
@@ -9,6 +11,7 @@ import { InkBorder, Onomatopoeia, ScreenTone, SpeedLines } from '@/components/ma
 import { pop } from '@/components/manga/SpeechBubble';
 import { Clover } from '@/components/easter-eggs/Grimoire';
 import { Logo } from '@/components/ui/Logo';
+import { useChapterLink } from '@/components/ui/Nav';
 import { StabLink } from '@/components/ui/StabLink';
 import { cn } from '@/lib/cn';
 
@@ -114,6 +117,18 @@ const icon = {
 /** Contracapa: "Continua no próximo volume...", balões com links e o botão de e-mail. */
 export function Contact() {
   const emailPending = isTodo(links.email);
+  const toChapter = useChapterLink();
+  const [copied, setCopied] = useState(false);
+  // muita gente não tem programa de e-mail configurado: além de abrir o mailto, copia o endereço
+  const copyEmail = () => {
+    navigator.clipboard?.writeText(links.email).then(
+      () => {
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 5000);
+      },
+      () => {},
+    );
+  };
   const mailto = `mailto:${links.email}?subject=${encodeURIComponent(contact.emailSubject)}`;
 
   return (
@@ -172,11 +187,22 @@ export function Contact() {
             ) : (
               <StabLink
                 href={mailto}
+                onStab={copyEmail}
                 wrapperClassName="inline-block"
                 className="font-display bg-accent text-on-accent shadow-lift hover:bg-ink hover:text-paper block border-[4px] border-(--ink) px-8 py-4 text-lg transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none sm:text-2xl"
               >
                 {contact.bubbles.email} ✉
               </StabLink>
+            )}
+            {!emailPending && (
+              <p className="text-sm font-semibold" aria-live="polite">
+                <span className="select-all">{links.email}</span>
+                {copied && (
+                  <span className="font-bubble bg-ink text-paper ml-2 px-2 py-0.5 text-xs">
+                    {contact.copied}
+                  </span>
+                )}
+              </p>
             )}
           </div>
           <InkBorder seed={91} weight={6} jitter={0.3} />
@@ -193,7 +219,15 @@ export function Contact() {
         </div>
 
         <footer className="flex flex-col items-center gap-3 pt-6">
-          <Logo size={56} decorative />
+          <Link
+            href="/#capa"
+            aria-label="Voltar para a capa"
+            title="Voltar para a capa"
+            onClick={toChapter('capa')}
+            className="transition-transform hover:-translate-y-1 hover:-rotate-6"
+          >
+            <Logo size={56} decorative />
+          </Link>
           <p className="font-bubble text-xs">{contact.colophon}</p>
           <p className="text-xs opacity-70">
             {contact.madeWith} · {site.volume}

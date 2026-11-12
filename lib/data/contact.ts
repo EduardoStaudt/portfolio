@@ -11,6 +11,8 @@ export const contact = {
     cv: 'Ver e imprimir o currículo',
     email: 'Mandar um e-mail',
   },
+  /** aviso depois de clicar no botão de e-mail */
+  copied: 'endereço copiado ✓',
   soon: 'em breve',
   colophon: 'Roteiro, arte e código: Eduardo Andrei Staudt.',
   madeWith: 'Feito com Next.js, nanquim digital e muito tereré.',

@@ -13,6 +13,8 @@ type Props = {
   children: ReactNode;
   className?: string;
   wrapperClassName?: string;
+  /** chamado no clique, antes de o link abrir (inclusive sem animação) */
+  onStab?: () => void;
 };
 
 const NAVIGATE_MS = 480; // tempo do golpe antes de seguir o link
@@ -23,7 +25,7 @@ const CLEAR_MS = 1700;
  * o link abre. Com teclado o golpe cai no centro. Com `prefers-reduced-motion`, ou com
  * Ctrl/Shift/botão do meio, vale o comportamento normal do link.
  */
-export function StabLink({ href, children, className, wrapperClassName }: Props) {
+export function StabLink({ href, children, className, wrapperClassName, onStab }: Props) {
   const router = useRouter();
   const [hit, setHit] = useState<{ x: number; y: number; key: number } | null>(null);
   const timers = useRef<number[]>([]);
@@ -39,6 +41,7 @@ export function StabLink({ href, children, className, wrapperClassName }: Props)
   }, []);
 
   const onClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    onStab?.();
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
     if (window.matchMedia(REDUCED_MOTION_QUERY).matches) return;
     e.preventDefault();
