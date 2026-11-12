@@ -129,7 +129,11 @@ function FighterRow({
   return (
     <div className="flex min-w-0 items-center gap-3 lg:flex-col lg:items-stretch lg:gap-2">
       <div className="relative lg:mx-auto">
-        <Portrait side={side} mood={mood} className="h-[5.2rem] w-[4.4rem] lg:h-36 lg:w-32" />
+        <Portrait
+          side={side}
+          mood={mood}
+          className="h-14 w-12 sm:h-[5.2rem] sm:w-[4.4rem] lg:h-36 lg:w-32"
+        />
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-20">
           <AnimatePresence>
             {fx &&
@@ -213,6 +217,8 @@ export function Board({
   }, [fxKey, impact, reduced, shake]);
   const sound = fx ? sfx(fx.step.events) : null;
   const planCount = slots.filter(Boolean).length;
+  const pickedCard = duel.fighters.player.hand.find((c) => c.uid === selected);
+  const picked = pickedCard ? cardDef(pickedCard.id) : null;
   const shown: Array<CardInstance | null> = planning
     ? slots
     : Array.from({ length: RULES.slots }, (_, i) => table?.cards[i] ?? null);
@@ -260,7 +266,7 @@ export function Board({
     <motion.div
       onKeyDown={onKeyDown}
       animate={shake}
-      className="grid grid-cols-1 gap-3 lg:grid-cols-[12.5rem_minmax(0,1fr)_12.5rem] lg:items-center lg:gap-x-5"
+      className="grid grid-cols-1 gap-2 sm:gap-3 lg:grid-cols-[12.5rem_minmax(0,1fr)_12.5rem] lg:items-center lg:gap-x-5"
     >
       {/* ---------- rival ---------- */}
       <div className="flex flex-col gap-2 lg:order-3">
@@ -272,17 +278,17 @@ export function Board({
           energy={duel.fighters.rival.energy}
         />
         <div className="flex items-center justify-between gap-3 lg:flex-col lg:items-stretch lg:gap-2">
-          <div aria-hidden className="flex lg:justify-center">
+          <div aria-hidden className="flex max-sm:hidden lg:justify-center">
             {duel.fighters.rival.hand.slice(0, 6).map((c, i) => (
               <CardBack key={c.uid} className={cn('h-11 w-8', i > 0 && '-ml-4')} />
             ))}
           </div>
-          <div className="font-bubble bg-paper relative min-h-[4.6rem] rounded-[1.4rem] border-[2.5px] border-(--ink) px-3 py-1.5 text-[0.62rem]">
+          <div className="font-bubble bg-paper relative min-h-[4.6rem] rounded-[1.4rem] border-[2.5px] border-(--ink) px-3 py-1.5 text-[0.62rem] max-sm:flex max-sm:min-h-[2.9rem] max-sm:flex-1 max-sm:items-center max-sm:gap-3 max-sm:rounded-xl max-sm:py-1">
             <span
               aria-hidden
               className="bg-paper absolute -top-2 right-6 h-2.5 w-2.5 rounded-full border-2 border-(--ink)"
             />
-            <p className="mb-1">{copy.intentLabel}</p>
+            <p className="mb-1 max-sm:mb-0">{copy.intentLabel}</p>
             {difficulty === 'hard' ? (
               <p className="font-display text-lg leading-none">？？？</p>
             ) : intent && intent.length ? (
@@ -291,7 +297,12 @@ export function Board({
                   const def = cardDef(c.id);
                   return (
                     <li key={c.uid} title={`${def.name}: ${def.text}`}>
-                      <CardFace def={def} side="rival" compact className="h-11 w-8" />
+                      <CardFace
+                        def={def}
+                        side="rival"
+                        compact
+                        className="!h-9 !w-7 sm:!h-11 sm:!w-8"
+                      />
                       <span className="sr-only">
                         {def.name}: {def.text}
                       </span>
@@ -307,9 +318,9 @@ export function Board({
       </div>
 
       {/* ---------- mesa ---------- */}
-      <div className="relative border-y-[3px] border-(--ink) py-3 lg:order-2">
+      <div className="relative border-y-[3px] border-(--ink) py-2 sm:py-3 lg:order-2">
         <span aria-hidden className="screentone-hatch absolute inset-0 opacity-[0.08]" />
-        <p className="font-bubble relative mb-2 text-center text-[0.68rem]">{status}</p>
+        <p className="font-bubble relative mb-1.5 text-center text-[0.68rem] sm:mb-2">{status}</p>
         <div data-navgroup className="relative flex items-center justify-center gap-2 sm:gap-4">
           {shown.map((card, i) => (
             <Slot
@@ -343,7 +354,7 @@ export function Board({
             </motion.span>
           )}
         </AnimatePresence>
-        <div className="relative mt-3 flex min-h-11 flex-wrap items-center justify-center gap-3">
+        <div className="relative mt-2 flex min-h-11 flex-wrap items-center justify-center gap-3 sm:mt-3">
           {planning && (
             <p
               className={cn(
@@ -387,7 +398,24 @@ export function Board({
             onDrop={onPlace}
           />
         </div>
-        <p className="font-bubble text-center text-[0.62rem] opacity-70">{copy.help}</p>
+        <p className="font-bubble text-center text-[0.62rem] opacity-70 max-sm:hidden">
+          {copy.help}
+        </p>
+        {/* celular: as cartas da mão são pequenas, então o efeito da carta tocada aparece aqui */}
+        <p
+          className="font-bubble flex min-h-10 items-center justify-center border-[2.5px] border-(--ink) px-2 py-1 text-center text-[0.7rem] sm:hidden"
+          aria-hidden
+        >
+          {picked ? (
+            <span>
+              <span className="font-display mr-1.5 uppercase">{picked.name}</span>
+              {picked.text}
+              <span className="block text-[0.6rem] opacity-70">{copy.helpTouchPlay}</span>
+            </span>
+          ) : (
+            <span className="opacity-70">{copy.helpTouch}</span>
+          )}
+        </p>
       </div>
       <p className="sr-only" aria-live="polite">
         {fx ? narrate(fx.step) : ''}

@@ -50,7 +50,7 @@ export function Modal({ label, onClose, children, className }: Props) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-(--z-egg) grid place-items-center overflow-y-auto p-4 print:hidden"
+      className="fixed inset-0 z-(--z-egg) grid place-items-center overflow-y-auto p-2 sm:p-4 print:hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

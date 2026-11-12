@@ -217,8 +217,8 @@ export default function CardDuel({ onClose, onWin }: Props) {
         style={{ '--duel-red': palette.red, '--duel-wine': palette.wine } as CSSProperties}
         className="bg-paper text-ink relative"
       >
-        <div className="relative p-3 sm:p-6">
-          <div className="mb-3 flex items-center justify-between gap-3">
+        <div className="relative p-2.5 sm:p-6">
+          <div className="mb-2 flex items-center justify-between gap-3 sm:mb-3">
             <h2 className="text-lg uppercase sm:text-2xl">{copy.title}</h2>
             <button
               type="button"
@@ -230,16 +230,19 @@ export default function CardDuel({ onClose, onWin }: Props) {
           </div>
 
           {phase === 'menu' && (
-            <div className="flex flex-col gap-5">
-              <div className="grid items-center gap-4 sm:grid-cols-[auto_1fr_auto]">
-                <Portrait side="player" className="mx-auto h-40 w-36" />
-                <div className="text-center">
-                  <p className="font-display ink-outline text-5xl text-(--duel-red)">VS</p>
+            <div className="flex flex-col gap-3 sm:gap-5">
+              {/* celular: os dois retratos lado a lado e o texto embaixo */}
+              <div className="grid grid-cols-2 items-center gap-3 sm:grid-cols-[auto_1fr_auto] sm:gap-4">
+                <Portrait side="player" className="mx-auto h-28 w-24 sm:h-40 sm:w-36" />
+                <div className="text-center max-sm:order-3 max-sm:col-span-2">
+                  <p className="font-display ink-outline text-3xl text-(--duel-red) sm:text-5xl">
+                    VS
+                  </p>
                   <p className="mt-2 text-sm sm:text-base">{copy.intro}</p>
                 </div>
-                <Portrait side="rival" className="mx-auto h-40 w-36" />
+                <Portrait side="rival" className="mx-auto h-28 w-24 sm:h-40 sm:w-36" />
               </div>
-              <ul className="grid gap-1.5 text-sm sm:grid-cols-2">
+              <ul className="grid gap-1 text-xs sm:grid-cols-2 sm:gap-1.5 sm:text-sm">
                 {copy.rules.map((rule) => (
                   <li key={rule} className="flex gap-2">
                     <span aria-hidden>◆</span>
@@ -247,17 +250,19 @@ export default function CardDuel({ onClose, onWin }: Props) {
                   </li>
                 ))}
               </ul>
-              <div className="grid gap-3 sm:grid-cols-3">
+              <div className="grid gap-2 sm:grid-cols-3 sm:gap-3">
                 {copy.levels.map((level, i) => (
                   <button
                     key={level.id}
                     type="button"
                     data-autofocus={i === 1 ? '' : undefined}
                     onClick={() => start(level.id)}
-                    className="group shadow-bubble hover:bg-ink hover:text-paper flex flex-col gap-1 border-[3px] border-(--ink) p-4 text-left transition-colors"
+                    className="group shadow-bubble hover:bg-ink hover:text-paper flex flex-col gap-1 border-[3px] border-(--ink) p-2.5 text-left transition-colors sm:p-4"
                   >
-                    <span className="font-display text-xl uppercase">{level.name}</span>
-                    <span className="text-sm">{level.note}</span>
+                    <span className="font-display text-base uppercase sm:text-xl">
+                      {level.name}
+                    </span>
+                    <span className="text-xs sm:text-sm">{level.note}</span>
                   </button>
                 ))}
               </div>

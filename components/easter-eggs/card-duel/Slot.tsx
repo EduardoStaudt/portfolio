@@ -33,7 +33,7 @@ export function Slot({ index, card, side, active, spent, armed, disabled, onPres
           : `Slot ${index + 1}, vazio${armed ? '. Enter coloca a carta selecionada' : ''}`
       }
       className={cn(
-        'relative grid h-[9.2rem] w-[6.5rem] shrink-0 place-items-center transition-transform sm:h-[10.6rem] sm:w-[7.5rem]',
+        'relative grid h-[7.6rem] w-[5.6rem] shrink-0 place-items-center transition-transform sm:h-[10.6rem] sm:w-[7.5rem]',
         !def && 'border-[3px] border-dashed border-(--ink)',
         !def && armed && 'bg-(--duel-red)/15 motion-safe:animate-pulse',
         active && 'z-10 scale-110 motion-reduce:scale-100',

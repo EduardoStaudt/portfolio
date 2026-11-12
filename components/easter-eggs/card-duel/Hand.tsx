@@ -11,7 +11,7 @@ type Props = {
   cards: CardInstance[];
   selected: number | null;
   disabled: boolean;
-  /** arrastar só com mouse: no toque a mão é um carrossel que rola de lado */
+  /** arrastar só com mouse; no celular as cartas encolhem para a mão inteira caber na tela */
   draggable: boolean;
   onSelect: (uid: number) => void;
   onDrop: (uid: number, slot: number) => void;
@@ -28,10 +28,10 @@ export function Hand({ cards, selected, disabled, draggable, onSelect, onDrop }:
   return (
     <ul
       aria-label="Sua mão"
-      className="no-scrollbar flex snap-x gap-2 overflow-x-auto px-3 pt-5 pb-2 sm:justify-center sm:gap-3 sm:overflow-visible"
+      className="flex justify-center gap-1 px-3 pt-4 pb-1.5 sm:gap-3 sm:pt-5 sm:pb-2"
     >
       {cards.length === 0 && (
-        <li className="font-bubble grid h-[9.2rem] place-items-center text-xs opacity-60 sm:h-[10.6rem]">
+        <li className="font-bubble grid h-24 place-items-center text-xs opacity-60 sm:h-[10.6rem]">
           Mão vazia
         </li>
       )}
@@ -44,7 +44,7 @@ export function Hand({ cards, selected, disabled, draggable, onSelect, onDrop }:
             layout="position"
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: on ? -16 : 0, opacity: 1 }}
-            className="shrink-0 snap-center"
+            className="max-sm:max-w-[4.6rem] max-sm:min-w-0 max-sm:flex-1 sm:shrink-0"
           >
             <motion.button
               type="button"
@@ -71,11 +71,12 @@ export function Hand({ cards, selected, disabled, draggable, onSelect, onDrop }:
                 if (!dragging.current) onSelect(card.uid);
               }}
               className={cn(
-                'relative block touch-pan-x disabled:opacity-60',
+                'relative block w-full disabled:opacity-60',
                 draggable && !disabled && 'cursor-grab active:cursor-grabbing',
               )}
             >
               <CardFace
+                fluid
                 def={def}
                 side="player"
                 className={cn(on && 'shadow-[0_0_0_4px_var(--duel-red)]')}

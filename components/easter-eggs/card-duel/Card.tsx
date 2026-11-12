@@ -148,15 +148,24 @@ type Props = {
   className?: string;
   /** versão pequena (intenção do rival) */
   compact?: boolean;
+  /**
+   * no celular a carta ocupa a largura que tiver e mostra só desenho, custo e nome
+   * (a mão inteira cabe na tela; o efeito aparece na faixa abaixo da mão)
+   */
+  fluid?: boolean;
 };
 
 /** Carta como mini página de mangá: borda grossa, retícula, custo num carimbo vermelho. */
-export function CardFace({ def, side, className, compact = false }: Props) {
+export function CardFace({ def, side, className, compact = false, fluid = false }: Props) {
   return (
     <span
       className={cn(
         'bg-paper text-ink relative flex flex-col overflow-hidden border-[3px] border-(--ink) text-left select-none',
-        compact ? 'h-[4.6rem] w-[3.3rem]' : 'h-[9.2rem] w-[6.5rem] sm:h-[10.6rem] sm:w-[7.5rem]',
+        compact
+          ? 'h-[4.6rem] w-[3.3rem]'
+          : fluid
+            ? 'max-sm:aspect-[5/7] max-sm:w-full sm:h-[10.6rem] sm:w-[7.5rem]'
+            : 'h-[7.6rem] w-[5.6rem] sm:h-[10.6rem] sm:w-[7.5rem]',
         className,
       )}
     >
@@ -164,7 +173,7 @@ export function CardFace({ def, side, className, compact = false }: Props) {
       <span
         className={cn(
           'relative grid place-items-center border-b-[3px] border-(--ink)',
-          compact ? 'h-full border-b-0' : 'h-[42%]',
+          compact ? 'h-full border-b-0' : fluid ? 'h-[42%] max-sm:h-[54%]' : 'h-[42%]',
           def.kind === 'attack' ? 'bg-paper' : 'bg-paper-shade',
         )}
       >
@@ -175,18 +184,32 @@ export function CardFace({ def, side, className, compact = false }: Props) {
       <span
         className={cn(
           'font-display absolute -top-px -left-px grid -rotate-6 place-items-center rounded-full border-[2.5px] border-(--ink) bg-(--duel-red) text-white',
-          compact ? 'h-5 w-5 text-[0.6rem]' : 'h-7 w-7 text-sm',
+          compact
+            ? 'h-5 w-5 text-[0.6rem]'
+            : 'h-7 w-7 text-sm max-sm:h-6 max-sm:w-6 max-sm:text-xs',
         )}
       >
         <span className="sr-only">Custo </span>
         {def.cost}
       </span>
       {!compact && (
-        <span className="relative flex flex-1 flex-col gap-0.5 px-1.5 py-1">
-          <span className="font-display text-[0.6rem] leading-[1.05] uppercase sm:text-[0.66rem]">
+        <span className="relative flex flex-1 flex-col gap-0.5 px-1.5 py-1 max-sm:px-1">
+          <span
+            className={cn(
+              'font-display leading-[1.05] uppercase sm:text-[0.66rem]',
+              fluid ? 'text-[0.46rem] [overflow-wrap:anywhere]' : 'text-[0.56rem]',
+            )}
+          >
             {def.name}
           </span>
-          <span className="text-[0.58rem] leading-[1.15] sm:text-[0.64rem]">{def.text}</span>
+          <span
+            className={cn(
+              'text-[0.54rem] leading-[1.15] sm:text-[0.64rem]',
+              fluid && 'max-sm:hidden',
+            )}
+          >
+            {def.text}
+          </span>
         </span>
       )}
     </span>

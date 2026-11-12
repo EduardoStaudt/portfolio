@@ -114,6 +114,9 @@ export const duel = {
   execute: 'Executar',
   pass: 'Passar a vez',
   help: 'Arraste a carta até um slot, ou clique na carta e depois no slot. No teclado: setas e Enter.',
+  /** celular: faixa abaixo da mão */
+  helpTouch: 'Toque em uma carta para ver o efeito.',
+  helpTouchPlay: 'Toque de novo na carta, ou em um slot, para jogar.',
   win: { big: 'FIM', text: 'O Ronin Rubro guardou a lâmina. Vitória do Mangaká!' },
   lose: {
     big: 'Continua...',
