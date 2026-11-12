@@ -160,10 +160,11 @@ export function PageFlip({ spreads, ariaLabel, header }: Props) {
   );
 
   const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowRight') {
+    // sentido de mangá: a próxima página fica à esquerda
+    if (e.key === 'ArrowLeft') {
       e.preventDefault();
       goTo(index + 1);
-    } else if (e.key === 'ArrowLeft') {
+    } else if (e.key === 'ArrowRight') {
       e.preventDefault();
       goTo(index - 1);
     }
@@ -180,14 +181,18 @@ export function PageFlip({ spreads, ariaLabel, header }: Props) {
     <div className="flex flex-wrap items-center justify-center gap-3">
       <button
         type="button"
-        onClick={() => goTo(index - 1)}
-        disabled={index === 0}
-        aria-label="Página anterior"
+        onClick={() => goTo(index + 1)}
+        disabled={index === n - 1}
+        aria-label="Próxima página"
         className="hand-box bg-paper font-display hover:bg-ink hover:text-paper min-h-12 min-w-14 px-5 py-2 text-2xl leading-none transition-colors disabled:pointer-events-none disabled:opacity-35"
       >
         ←
       </button>
-      <ol className="flex flex-wrap items-center justify-center gap-2" aria-label="Projetos">
+      {/* ordem de mangá: o primeiro projeto fica à direita (no DOM a ordem continua a de leitura) */}
+      <ol
+        className="flex flex-row-reverse flex-wrap items-center justify-center gap-2"
+        aria-label="Projetos"
+      >
         {spreads.map((s, i) => (
           <li key={s.id}>
             <button
@@ -207,9 +212,9 @@ export function PageFlip({ spreads, ariaLabel, header }: Props) {
       </ol>
       <button
         type="button"
-        onClick={() => goTo(index + 1)}
-        disabled={index === n - 1}
-        aria-label="Próxima página"
+        onClick={() => goTo(index - 1)}
+        disabled={index === 0}
+        aria-label="Página anterior"
         className="hand-box bg-paper font-display hover:bg-ink hover:text-paper min-h-12 min-w-14 px-5 py-2 text-2xl leading-none transition-colors disabled:pointer-events-none disabled:opacity-35"
       >
         →
