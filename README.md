@@ -92,7 +92,7 @@ A página `/curriculo` lê `lib/data/cv.ts`: faixa preta com o nome e os contato
 - A margem da página é zero (`@page { margin: 0 }`) para o navegador não imprimir data, título e endereço; a margem visível vem do próprio layout.
 - Os tamanhos de texto saem de uma escala só (`t.item`, `t.body`, `t.meta`, no topo de `app/curriculo/page.tsx`).
 - Todos os endereços são links, e continuam clicáveis no PDF salvo pelo navegador ("Salvar como PDF"; a impressora "Microsoft Print to PDF" descarta os links).
-- Cada projeto aceita uma lista `links`. O do portfólio entra sozinho quando `site.url` deixar de ser placeholder.
+- Cada projeto aceita uma lista `links`. O do portfólio usa `site.url` e o repositório.
 
 ### Adicionar um projeto
 

@@ -4,7 +4,7 @@ O que depende de você, Eduardo. Quase tudo se resolve editando `lib/data/`.
 
 ## 1. Configuração
 
-- [ ] **URL do site**: hoje `https://TODO_DOMINIO.vercel.app`. Defina `NEXT_PUBLIC_SITE_URL` na Vercel (ou troque o valor em `lib/data/site.ts`). Sem isso, sitemap, robots e Open Graph apontam para um domínio que não existe.
+- [x] **URL do site**: `https://eduardostaudt.vercel.app` (em `lib/data/site.ts`; `NEXT_PUBLIC_SITE_URL` ainda tem prioridade, se definida).
 - [x] GitHub, e-mail, NNAdsorption e Hero Maze: preenchidos.
 - [x] Currículo: virou a página `/curriculo` (conteúdo em `lib/data/cv.ts`).
 
@@ -17,7 +17,7 @@ O que depende de você, Eduardo. Quase tudo se resolve editando `lib/data/`.
 - [ ] **"Em vez de vrrrum, eduardo"**: fiz as duas leituras: a palavra a digitar agora é `eduardo`, e o grito na tela é "EDUARDO!!" (o VRRRUM ficou menor, ao fundo).
 - [ ] **Página "Em breve"**: ficou vazia de propósito, só com o desenho. A continuação com PINNs virou o quadro "Parte 2 · Em desenvolvimento" dentro do NNAdsorption. O texto desse quadro (`next` em `lib/data/projects.ts`) fui eu que escrevi: revise.
 - [ ] **Currículo impresso**: voltou a ter o desenho da página (faixa preta, títulos numerados com fio vermelho), sem logo, japonês ou retículas. Conferi gerando o PDF: uma página em A4, sem cabeçalho e rodapé do navegador, com os 18 links clicáveis.
-- [ ] **Portfólio no currículo**: o projeto aponta para o repositório (`github.com/EduardoStaudt/portfolio`). Quando o site estiver no ar, defina `NEXT_PUBLIC_SITE_URL` (ou troque `site.url` em `lib/data/site.ts`) e o endereço do site aparece junto.
+- [x] **Portfólio no currículo**: aponta para o site e para o repositório.
 - [ ] **Glazzy**: a stack agora é Flutter, Dart e Cloudflare, no site e no currículo. O texto continua curto ("ERP para vidraçarias, do orçamento à entrega"); se quiser detalhar o que você fez, me passe.
 - [ ] **Técnico em Administração**: entrou como quadro no Cap. 1 e na formação do currículo. Faltam o nome da escola e o ano. O balão de pensamento ("Foi ali que comecei a entender como um negócio funciona") fui eu que escrevi: revise.
 - [ ] **Quadro da faculdade (Cap. 1)**: juntei os quadros do notebook e da pixel art em um só. A frase nova é "E nos jogos da faculdade, os sprites em pixel art ficam comigo". Ainda há "desenho pixel por pixel" no primeiro quadro, "pixel artist" na descrição do site e "Pixel art 88" no grimório: não mexi.
@@ -36,7 +36,7 @@ O que depende de você, Eduardo. Quase tudo se resolve editando `lib/data/`.
 ## 4. Decisões que tomei
 
 - OBMEP agora só aparece em dois lugares: um item curto na linha do tempo e uma linha no currículo, sem o "5". Saiu do Cap. 1 e do grimório.
-- A capa e o livro de projetos abrem para a direita (lombada à direita), como mangá, e as viradas curvam a folha. No livro, o desenho fica na página direita e o texto na esquerda. As setas ← → continuam significando anterior/próximo.
+- A capa e o livro de projetos abrem para a direita (lombada à direita), como mangá, e as viradas curvam a folha. No livro, o desenho fica na página direita e o texto na esquerda. Os botões dos projetos seguem o mesmo sentido: o primeiro (Glazzy) fica à direita, e a seta ← (ou a tecla) leva ao próximo.
 - A página de sumário saiu: a capa abre direto sobre o Cap. 1, e a explicação de como ler foi para o quadro "Quem sou". No celular a capa não abre mais: é uma página comum, seguida do Cap. 1.
 - O botão de e-mail abre o `mailto:` e também copia o endereço, que agora aparece escrito embaixo do botão. Quem não tem programa de e-mail configurado não via nada acontecer.
 - A palavra "protagonista" saiu do site e do currículo.

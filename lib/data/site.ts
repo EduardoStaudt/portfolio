@@ -15,7 +15,7 @@ export const site = {
   description:
     'Portfólio em formato de mangá de Eduardo Andrei Staudt: estudante de Ciência da Computação (UTFPR) e Ciências Econômicas (Uninter), pesquisador em redes neurais, desenvolvedor e pixel artist.',
   /** URL pública (sem barra no final). Pode vir de NEXT_PUBLIC_SITE_URL na Vercel. */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://TODO_DOMINIO.vercel.app',
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eduardostaudt.vercel.app',
   locale: 'pt_BR',
   keywords: [
     'Eduardo Andrei Staudt',
