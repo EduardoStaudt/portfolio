@@ -25,7 +25,7 @@ Requer Node 20 ou mais novo.
 - React Three Fiber + three.js: cena das espadas, com shader de cel shading próprio
 - Fontes via `next/font`: Dela Gothic One (títulos e katakana), Inter (corpo), Comic Neue (balões)
 - Vitest: testes das regras do duelo de cartas
-- Sem backend. Contato por `mailto:` e links.
+- Sem backend. Contato por links; o botão de e-mail abre o `mailto:` e copia o endereço.
 
 ## Estrutura
 
@@ -35,7 +35,7 @@ app/
   page.tsx              a home: as seis seções em ordem
   globals.css           lê os tokens como CSS variables; utilidades de mangá, keyframes e impressão
   not-found.tsx         404 "Esse capítulo ainda não foi desenhado"
-  curriculo/page.tsx    currículo: ficha no estilo do site na tela, documento formal ao imprimir
+  curriculo/page.tsx    currículo, com o mesmo desenho na tela e na impressão
   segredo/page.tsx      página secreta (abre ao achar todos os easter eggs)
   opengraph-image.tsx   imagem Open Graph gerada no build
   sitemap.ts, robots.ts
@@ -51,7 +51,8 @@ components/
                         Grimoire, PixelEditor, SecretPage, Modal
   easter-eggs/card-duel/  CardDuel (modal e fluxo), Board, Hand, Slot, Card, Portrait, HpBar,
                         ResultScreen
-  ui/                   Header, Nav, Cursor, Loader, ThemeToggle, Logo, ChapterSlash, PrintButton,
+  ui/                   Header, Nav, Cursor, Loader, ThemeToggle, Logo, Logo3D (capa), ChapterSlash,
+                        PrintButton,
                         StabLink e SwordGlyph (espada da contracapa)
 lib/
   data/                 TODO o conteúdo do site (textos, projetos, links, currículo)
@@ -73,7 +74,7 @@ Tudo que é texto, link ou lista fica em `lib/data/`. Nenhum componente precisa 
 | `chapters.ts` | nomes e ordem dos capítulos no sumário (a ordem das seções fica em `page.tsx`) |
 | `about.ts`    | os quadros do Cap. 1: recordatório, balões, onomatopeia e qual desenho usar    |
 | `projects.ts` | os projetos do Cap. 2 (cada um vira uma página dupla)                          |
-| `skills.ts`   | as três espadas do Cap. 3 e as skills de cada uma                              |
+| `skills.ts`   | as três espadas do Cap. 3 (uma por área) e as skills de cada uma               |
 | `research.ts` | a linha do tempo do Cap. 4                                                     |
 | `contact.ts`  | textos da contracapa                                                           |
 | `cv.ts`       | o currículo da página `/curriculo`                                             |
@@ -85,9 +86,13 @@ Ficam em `lib/data/site.ts`. Um valor que comece com `TODO_` é tratado como pen
 
 ### Currículo
 
-A página `/curriculo` lê `lib/data/cv.ts`. Na tela é uma "ficha do protagonista": faixa com o nome, coluna lateral (formação, competências, honrarias) e coluna principal (resumo, experiência, projetos). O botão "Imprimir / salvar em PDF" abre a impressão do navegador, e a folha impressa é um documento formal: preto no branco, uma fonte só, sem logo, faixas ou etiquetas, em uma página A4. As regras ficam nas classes `print:` da página e no bloco `@media print` de `app/globals.css`; a linha `font-size` do `html` ali dentro controla a escala: diminua se o conteúdo crescer e passar de uma folha.
+A página `/curriculo` lê `lib/data/cv.ts`: faixa preta com o nome e os contatos, coluna lateral (formação, competências, honrarias) e coluna principal (resumo, experiência, projetos). O botão "Imprimir / salvar em PDF" abre a impressão do navegador. A folha impressa tem o mesmo desenho (sem a logo, as retículas e a onomatopeia) e cabe em uma página A4.
 
-Cada projeto do currículo aceita uma lista `links`. O do portfólio entra sozinho quando `site.url` deixar de ser placeholder.
+- As regras ficam no bloco `@media print` de `app/globals.css`. A linha `font-size` do `html` ali dentro controla a escala: diminua se o conteúdo crescer e passar de uma folha.
+- A margem da página é zero (`@page { margin: 0 }`) para o navegador não imprimir data, título e endereço; a margem visível vem do próprio layout.
+- Os tamanhos de texto saem de uma escala só (`t.item`, `t.body`, `t.meta`, no topo de `app/curriculo/page.tsx`).
+- Todos os endereços são links, e continuam clicáveis no PDF salvo pelo navegador ("Salvar como PDF"; a impressora "Microsoft Print to PDF" descarta os links).
+- Cada projeto aceita uma lista `links`. O do portfólio entra sozinho quando `site.url` deixar de ser placeholder.
 
 ### Adicionar um projeto
 
@@ -107,6 +112,8 @@ Substitua `public/logo.svg` pelo novo arquivo, com o mesmo nome. Só isso.
 
 A logo aparece no header, na capa, no loader, no rodapé, no currículo, no favicon e na imagem Open Graph, e todos leem esse mesmo arquivo. Nenhum efeito depende do desenho: ela só recebe fade/scale simples e `image-rendering: pixelated`. Ela fica sobre uma plaqueta de papel claro, então funciona em qualquer tema. Se a nova logo não for pixel art, remova a classe `pixelated` em `components/ui/Logo.tsx`.
 
+Na capa a logo é um relevo 3D (`components/ui/Logo3D.tsx`): a mesma imagem empilhada em camadas, com CSS. Ela se inclina na direção do mouse, pode ser girada arrastando e volta sozinha ao lugar. Funciona melhor com logos de fundo transparente.
+
 ## Temas
 
 - **Colorido** (padrão) e **P&B**: botão no header. No colorido acendem vermelho, laranja e azul; no P&B os acentos apontam para a própria tinta.
@@ -115,16 +122,18 @@ A logo aparece no header, na capa, no loader, no rodapé, no currículo, no favi
 
 ## Comportamento por tela
 
-| Seção              | Desktop (≥ 1024px)                                 | Mobile / `prefers-reduced-motion`                                |
-| ------------------ | -------------------------------------------------- | ---------------------------------------------------------------- |
-| Capa               | abre com o scroll, para a direita, curvando-se     | no mobile abre igual; sem movimento, capa e sumário em sequência |
-| Cap. 1 Quem sou    | scroll vertical move a tira para o lado            | quadros empilhados (webtoon)                                     |
-| Cap. 2 Projetos    | página dupla em sentido de mangá; a folha se curva | deslizar para o lado (scroll-snap)                               |
-| Cap. 3 Habilidades | cena 3D                                            | 3D leve no celular; SVG 2D em aparelho fraco ou sem movimento    |
-| Cap. 4 Pesquisa    | os quadros entram deslizando das laterais          | só aparecem (fade)                                               |
-| Contracapa         | o cursor vira espada e finca nos links ao clicar   | no toque a espada também finca; sem movimento, link normal       |
+| Seção              | Desktop (≥ 1024px)                                 | Mobile / `prefers-reduced-motion`                             |
+| ------------------ | -------------------------------------------------- | ------------------------------------------------------------- |
+| Capa               | abre com o scroll, curvando-se, e revela o Cap. 1  | página comum, seguida do Cap. 1                               |
+| Cap. 1 Quem sou    | scroll vertical move a tira para o lado            | quadros empilhados (webtoon)                                  |
+| Cap. 2 Projetos    | página dupla em sentido de mangá; a folha se curva | deslizar para o lado (scroll-snap)                            |
+| Cap. 3 Habilidades | cena 3D                                            | 3D leve no celular; SVG 2D em aparelho fraco ou sem movimento |
+| Cap. 4 Pesquisa    | os quadros entram deslizando das laterais          | só aparecem (fade)                                            |
+| Contracapa         | o cursor vira espada e finca nos links ao clicar   | no toque a espada também finca; sem movimento, link normal    |
 
 No livro de projetos o desenho fica na página direita (lida primeiro) e o texto na esquerda, e as folhas viram para a direita, como a capa. O texto dessas páginas cresce junto com o livro (tamanho em `cqh`/`cqw`).
+
+Não há página de sumário: a capa abre direto sobre o Cap. 1, que fica por baixo dela (a seção sobe com margem negativa; a constante `COVER_SCROLL` em `components/sections/About.tsx` precisa bater com a altura da seção da capa). O sumário continua no botão do header.
 
 No Cap. 1, um balão pode ser uma "máscara": em `lib/data/about.ts`, um balão com `reveal` mostra `text`, quebra ao ser clicado e revela `reveal`.
 
@@ -137,7 +146,7 @@ Ao trocar de capítulo rolando, a página dá um tremor leve. O corte diagonal d
 <details>
 <summary>Mostrar</summary>
 
-1. **Chapéu de palha**: no céu do quadro "Duas graduações" do Cap. 1. Clique: "Tesouro encontrado!", o cursor estica como borracha e o aviso oferece o botão "Aceitar o duelo".
+1. **Chapéu de palha**: na cabeça do personagem do primeiro quadro do Cap. 1. Clique: "Tesouro encontrado!", o cursor estica como borracha e o aviso oferece o botão "Aceitar o duelo".
 2. **Serra**: digite `eduardo` (ou toque 5 vezes rápido na logo do header). A tela treme, um corte de serra atravessa a página e o nome aparece gritado.
 3. **Grimório**: Konami code (↑ ↑ ↓ ↓ ← → ← → B A), ou o trevo discreto no canto da contracapa. O livro desce dentro de um círculo mágico; ao clicar, a capa vira em 3D e a ficha estilo RPG se preenche.
 
