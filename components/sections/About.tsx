@@ -114,7 +114,8 @@ function StoryPanel({ panel, index }: { panel: AboutPanel; index: number }) {
           </div>
         )}
       </div>
-      <div className="relative flex h-full min-h-[30rem] flex-col justify-between gap-4 p-4 sm:p-6 lg:motion-safe:min-h-0">
+      {/* a camada dos balões cobre o quadro todo: não pode roubar o clique do chapéu, que fica no desenho */}
+      <div className="pointer-events-none relative flex h-full min-h-[30rem] flex-col justify-between gap-4 p-4 sm:p-6 lg:motion-safe:min-h-0">
         <div className="flex flex-col gap-4">
           {panel.caption && <Caption className="max-w-[75%] self-start">{panel.caption}</Caption>}
           {firstBubble && <BubbleItem bubble={firstBubble} index={0} />}

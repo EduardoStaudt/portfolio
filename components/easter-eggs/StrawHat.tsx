@@ -5,7 +5,7 @@ import { emit } from '@/lib/bus';
 import { cn } from '@/lib/cn';
 
 /** Chapéu de palha genérico, desenho próprio. */
-export function HatIcon({ className }: { className?: string }) {
+export function HatIcon({ className, blink = false }: { className?: string; blink?: boolean }) {
   return (
     <svg aria-hidden width="46" height="30" viewBox="0 0 46 30" className={className}>
       <ellipse
@@ -24,7 +24,14 @@ export function HatIcon({ className }: { className?: string }) {
         strokeWidth="2.2"
         strokeLinejoin="round"
       />
-      <path d="M10.3 17c8 3 17.5 3 25.400 0l.3 4c-8 3 -18 3 -26 0Z" fill="var(--ink)" />
+      {/* faixa: vermelha; no chapéu clicável ela pisca de leve */}
+      <path
+        d="M10.3 17c8 3 17.5 3 25.400 0l.3 4c-8 3 -18 3 -26 0Z"
+        fill="var(--accent)"
+        stroke="var(--ink)"
+        strokeWidth="1"
+        className={blink ? 'soft-blink' : undefined}
+      />
       <path
         d="M15 9l2 4M22 6v5M29 8l-1.500 4M6 22l4 2M36 24l4 -2"
         stroke="var(--ink)"
@@ -51,7 +58,7 @@ export function StrawHat({ className }: { className?: string }) {
       }}
       className={cn('group transition-transform hover:-translate-y-0.5 hover:rotate-6', className)}
     >
-      <HatIcon className="h-full w-full" />
+      <HatIcon blink className="h-full w-full" />
     </button>
   );
 }
