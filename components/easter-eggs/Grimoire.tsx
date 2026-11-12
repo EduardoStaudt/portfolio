@@ -194,7 +194,7 @@ function GrimoireDialog({ onClose }: { onClose: () => void }) {
             ref={closeButton}
             type="button"
             onClick={onClose}
-            className="font-bubble bg-ink text-paper mt-6 px-4 py-2 text-xs"
+            className="font-bubble bg-ink text-paper mx-auto mt-6 block self-center px-8 py-3.5 text-base"
           >
             Fechar o grimório
           </button>
