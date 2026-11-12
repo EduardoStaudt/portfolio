@@ -159,6 +159,20 @@ export function PageFlip({ spreads, ariaLabel, header }: Props) {
     [n],
   );
 
+  // carrossel: a altura acompanha o projeto à vista, para não sobrar um vão antes dos botões
+  useEffect(() => {
+    const box = carousel.current;
+    const page = box?.children[index];
+    if (!box || !(page instanceof HTMLElement)) return;
+    const fit = () => {
+      box.style.height = page.offsetHeight ? `${page.offsetHeight}px` : '';
+    };
+    fit();
+    const watcher = new ResizeObserver(fit);
+    watcher.observe(page);
+    return () => watcher.disconnect();
+  }, [index]);
+
   const onKeyDown = (e: KeyboardEvent) => {
     // sentido de mangá: a próxima página fica à esquerda
     if (e.key === 'ArrowLeft') {
@@ -178,19 +192,19 @@ export function PageFlip({ spreads, ariaLabel, header }: Props) {
   };
 
   const controls = (
-    <div className="flex flex-wrap items-center justify-center gap-3">
+    <div className="flex flex-wrap items-center justify-center gap-3 max-sm:flex-nowrap max-sm:gap-2">
       <button
         type="button"
         onClick={() => goTo(index + 1)}
         disabled={index === n - 1}
         aria-label="Próxima página"
-        className="hand-box bg-paper font-display hover:bg-ink hover:text-paper min-h-12 min-w-14 px-5 py-2 text-2xl leading-none transition-colors disabled:pointer-events-none disabled:opacity-35"
+        className="hand-box bg-paper font-display hover:bg-ink hover:text-paper min-h-12 min-w-14 px-5 py-2 text-2xl leading-none transition-colors disabled:pointer-events-none disabled:opacity-35 max-sm:min-w-11 max-sm:px-3"
       >
         ←
       </button>
       {/* ordem de mangá: o primeiro projeto fica à direita (no DOM a ordem continua a de leitura) */}
       <ol
-        className="flex flex-row-reverse flex-wrap items-center justify-center gap-2"
+        className="flex flex-row-reverse flex-wrap items-center justify-center gap-2 max-sm:flex-nowrap"
         aria-label="Projetos"
       >
         {spreads.map((s, i) => (
@@ -200,12 +214,16 @@ export function PageFlip({ spreads, ariaLabel, header }: Props) {
               onClick={() => goTo(i)}
               aria-current={i === index ? 'true' : undefined}
               className={cn(
-                'font-bubble min-h-12 border-[3px] border-(--ink) px-4 py-2 text-sm transition-colors sm:px-5',
+                'font-bubble min-h-12 border-[3px] border-(--ink) px-4 py-2 text-sm transition-colors max-sm:min-w-11 max-sm:px-0 max-sm:text-base sm:px-5',
                 i === index ? 'bg-ink text-paper' : 'bg-paper text-ink hover:bg-paper-shade',
               )}
             >
               <span className="sr-only">Ir para o projeto </span>
-              {s.label}
+              {/* celular: só o número, para os botões caberem em uma linha */}
+              <span aria-hidden className="sm:hidden">
+                {i + 1}
+              </span>
+              <span className="max-sm:sr-only">{s.label}</span>
             </button>
           </li>
         ))}
@@ -215,7 +233,7 @@ export function PageFlip({ spreads, ariaLabel, header }: Props) {
         onClick={() => goTo(index - 1)}
         disabled={index === 0}
         aria-label="Página anterior"
-        className="hand-box bg-paper font-display hover:bg-ink hover:text-paper min-h-12 min-w-14 px-5 py-2 text-2xl leading-none transition-colors disabled:pointer-events-none disabled:opacity-35"
+        className="hand-box bg-paper font-display hover:bg-ink hover:text-paper min-h-12 min-w-14 px-5 py-2 text-2xl leading-none transition-colors disabled:pointer-events-none disabled:opacity-35 max-sm:min-w-11 max-sm:px-3"
       >
         →
       </button>
@@ -309,7 +327,7 @@ export function PageFlip({ spreads, ariaLabel, header }: Props) {
         <div
           ref={carousel}
           onScroll={onCarouselScroll}
-          className="no-scrollbar -mx-(--space-page) flex snap-x snap-mandatory overflow-x-auto lg:motion-safe:hidden"
+          className="no-scrollbar -mx-(--space-page) flex snap-x snap-mandatory items-start overflow-x-auto overflow-y-hidden transition-[height] duration-300 lg:motion-safe:hidden"
         >
           {spreads.map((s, i) => (
             <article
@@ -334,6 +352,10 @@ export function PageFlip({ spreads, ariaLabel, header }: Props) {
           ))}
         </div>
 
+        {/* celular: nome do projeto atual, já que os botões mostram só números */}
+        <p className="font-display -mb-2 text-center text-sm uppercase sm:hidden" aria-hidden>
+          {index + 1}. {spreads[index].label}
+        </p>
         {controls}
         <p className="font-bubble text-center text-[0.7rem] opacity-70" aria-hidden>
           <span className="hidden lg:motion-safe:inline">Role ou use ← → para virar a página</span>
