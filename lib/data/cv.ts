@@ -1,7 +1,6 @@
 /**
- * Currículo (página /curriculo). Na tela é a "ficha do protagonista", no estilo do site;
- * ao imprimir vira um documento formal, em preto e branco, que cabe em uma folha A4
- * (ver o bloco `@media print` em app/globals.css).
+ * Currículo (página /curriculo). A tela e a impressão têm o mesmo desenho; a impressão
+ * cabe em uma folha A4 (ver o bloco `@media print` em app/globals.css).
  */
 
 import { site } from './site';
@@ -58,8 +57,8 @@ export const cv = {
     },
     {
       name: 'Glazzy',
-      stack: 'Web',
-      text: 'ERP para vidraçarias, do orçamento à entrega em um só lugar. Produto no ar.',
+      stack: 'Flutter (Dart), Cloudflare',
+      text: 'ERP para vidraçarias, do orçamento à entrega em um só lugar. Produto no ar, publicado na Cloudflare.',
       links: ['https://glazzy.pages.dev'],
     },
     {

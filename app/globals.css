@@ -212,6 +212,18 @@
     transform: translateY(6px);
   }
 }
+/* balão que pede clique: pisca e pulsa */
+@keyframes call-blink {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(1.07);
+  }
+}
 @keyframes glint {
   0% {
     transform: scale(0) rotate(0deg);
@@ -290,6 +302,9 @@
   .bob {
     animation: bob 1.6s ease-in-out infinite;
   }
+  .call-blink {
+    animation: call-blink 0.9s ease-in-out infinite;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -341,13 +356,14 @@ html[data-stab] .cursor-nib {
 }
 
 /*
- * Impressão: tudo vira documento formal (usado pela página /curriculo).
- * Papel branco, tinta preta, fonte de texto em tudo, sem bordas desenhadas, retículas ou sombras.
+ * Impressão (usada pela página /curriculo): papel branco, tinta preta, detalhes em vermelho,
+ * sem bordas desenhadas, retículas ou sombras.
  */
 @media print {
+  /* margem zero: o navegador deixa de imprimir data, título e endereço; a folha traz a própria margem */
   @page {
     size: A4;
-    margin: 11mm 12mm;
+    margin: 0;
   }
   :root,
   :root[data-page],
@@ -355,28 +371,21 @@ html[data-stab] .cursor-nib {
     --paper: #fff !important;
     --paper-shade: #fff !important;
     --ink: #000 !important;
-    --accent: #000 !important;
-    --accent-text: #000 !important;
+    --accent: #c2182b !important;
+    --accent-text: #a31222 !important;
     --on-accent: #fff !important;
-    /* documento formal: uma fonte só, a de texto */
+    /* rótulos na fonte de texto; os títulos mantêm a fonte de destaque */
     --ff-bubble: var(--ff-body) !important;
-    --ff-display: var(--ff-body) !important;
     color-scheme: light !important;
   }
   /* tudo que usa rem encolhe junto: o currículo cabe em uma folha */
   html {
-    font-size: 13.3px !important;
+    font-size: 14px !important;
   }
   html,
   body {
     background: #fff !important;
     background-image: none !important;
-  }
-  h1,
-  h2,
-  h3 {
-    font-weight: 700;
-    letter-spacing: 0;
   }
   .ink-border,
   .speed-lines,
@@ -390,12 +399,12 @@ html[data-stab] .cursor-nib {
   .shadow-bubble {
     box-shadow: none !important;
   }
-  /* rótulos: sem caixa alta nem cara de balão */
   .font-bubble {
     text-transform: none;
     letter-spacing: 0;
   }
-  /* os marcadores (bolinhas) saem mesmo com "gráficos de fundo" desligado */
+  /* a faixa preta e os detalhes vermelhos saem mesmo com "gráficos de fundo" desligado */
+  .cv-sheet,
   .cv-sheet * {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
