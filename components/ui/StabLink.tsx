@@ -143,6 +143,9 @@ export function StabLink({ href, children, className, wrapperClassName, onStab }
               transition={{ delay: 0.15, type: 'spring', stiffness: 520, damping: 15 }}
             >
               ザクッ
+              <span className="font-bubble ml-1 align-top text-[0.36em] text-[#0A0A0A] [-webkit-text-stroke:0]">
+                ZAC!
+              </span>
             </motion.span>
           </motion.span>
         )}

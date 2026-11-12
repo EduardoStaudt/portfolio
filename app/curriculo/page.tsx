@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { cv } from '@/lib/data/cv';
 import { isTodo, links, site } from '@/lib/data/site';
-import { Onomatopoeia, ScreenTone, SpeedLines } from '@/components/manga';
+import { ScreenTone, SpeedLines } from '@/components/manga';
 import { Logo } from '@/components/ui/Logo';
 import { PrintButton } from '@/components/ui/PrintButton';
 
@@ -49,7 +49,7 @@ const strip = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/
 
 /**
  * Currículo: faixa preta com o nome e os contatos, coluna lateral e coluna principal.
- * A impressão usa o mesmo desenho, sem a logo, as retículas e a onomatopeia, em uma folha A4
+ * A impressão usa o mesmo desenho, sem a logo e as retículas, em uma folha A4
  * (bloco `@media print` de app/globals.css, que também ajusta a escala do texto e zera a
  * margem da página para o navegador não imprimir data, título e endereço).
  * Todos os endereços são links de verdade: continuam clicáveis no PDF salvo.
@@ -107,13 +107,6 @@ export default function CurriculoPage() {
               </h1>
               <p className="mt-2 text-[1rem] font-semibold print:mt-1.5">{cv.headline}</p>
             </div>
-            <Onomatopoeia
-              text="ドン!"
-              size="3.4rem"
-              tone="hollow"
-              rotate={10}
-              className="hidden !text-(--ink) [-webkit-text-stroke-color:var(--paper)] md:inline-block print:!hidden"
-            />
           </div>
           <ul
             className={`border-paper/40 relative flex flex-wrap gap-x-5 gap-y-1 border-t px-5 py-2.5 sm:px-7 print:px-[12mm] print:py-2 ${t.body}`}

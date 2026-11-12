@@ -17,7 +17,9 @@ export type SkillSword = {
   /** texto da ficha */
   description: string;
   skills: { name: string; note?: string }[];
+  /** onomatopeia do hover e a leitura dela */
   sfx: string;
+  sfxSub: string;
 };
 
 export const skillsIntro = {
@@ -51,6 +53,7 @@ export const swords: SkillSword[] = [
       { name: 'Git / GitHub' },
     ],
     sfx: 'シャキン',
+    sfxSub: 'SHING',
   },
   {
     id: 'machine-learning',
@@ -70,6 +73,7 @@ export const swords: SkillSword[] = [
       { name: 'Pesquisa científica' },
     ],
     sfx: 'ズバァン',
+    sfxSub: 'ZUBAN',
   },
   {
     id: 'outros',
@@ -88,5 +92,6 @@ export const swords: SkillSword[] = [
       { name: 'Metodologias ágeis' },
     ],
     sfx: 'ガキン',
+    sfxSub: 'CLANG',
   },
 ];

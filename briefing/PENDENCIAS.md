@@ -40,6 +40,9 @@ O que depende de você, Eduardo. Quase tudo se resolve editando `lib/data/`.
 - A página de sumário saiu: a capa abre direto sobre o Cap. 1, e a explicação de como ler foi para o quadro "Quem sou". No celular a capa não abre mais: é uma página comum, seguida do Cap. 1.
 - O botão de e-mail abre o `mailto:` e também copia o endereço, que agora aparece escrito embaixo do botão. Quem não tem programa de e-mail configurado não via nada acontecer.
 - A palavra "protagonista" saiu do site e do currículo.
+- O capítulo de habilidades fica pinado por um trecho do scroll no desktop, como o livro de projetos.
+- Toda onomatopeia em japonês tem a leitura pequena ao lado (capa, lombada, balão que quebra, golpe de espada, contracapa, espadas). O currículo não tem mais nada em japonês.
+- A faixa do chapéu de palha é vermelha e pisca de leve, como pista de que ele é clicável.
 - Todos os botões de projeto dizem "Ver projeto" (`projectsIntro.linkLabel`).
 - O site abre no modo escuro e colorido para quem ainda não escolheu; a preferência do sistema operacional não é mais consultada. A escolha feita nos botões continua salva.
 - O balão "Meu plano?" do último quadro do Cap. 1 quebra ao ser clicado e revela "Empreender!". Com movimento reduzido, a troca é direta.

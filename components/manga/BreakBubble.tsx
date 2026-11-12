@@ -97,7 +97,7 @@ export function BreakBubble({ text, reveal, tail = 'bl', delay = 0, className }:
           onClick={crack}
           aria-label={`${text} Clique para quebrar o balão e ver a resposta.`}
           className={cn(
-            'group relative block cursor-pointer',
+            'group pointer-events-auto relative block cursor-pointer',
             state === 'closed' && 'call-blink hover:[animation-play-state:paused]',
           )}
         >
@@ -144,6 +144,9 @@ export function BreakBubble({ text, reveal, tail = 'bl', delay = 0, className }:
                 className="font-display text-accent ink-outline pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl whitespace-nowrap"
               >
                 パリン!
+                <span className="font-bubble text-ink ml-1 align-top text-[0.22em] [-webkit-text-stroke:0]">
+                  CRAC!
+                </span>
               </motion.span>
             </>
           )}

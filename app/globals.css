@@ -224,6 +224,16 @@
     transform: scale(1.07);
   }
 }
+/* piscar leve: chama a atenção sem gritar */
+@keyframes soft-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
 @keyframes glint {
   0% {
     transform: scale(0) rotate(0deg);
@@ -301,6 +311,9 @@
   }
   .bob {
     animation: bob 1.6s ease-in-out infinite;
+  }
+  .soft-blink {
+    animation: soft-blink 1.4s ease-in-out infinite;
   }
   .call-blink {
     animation: call-blink 0.9s ease-in-out infinite;

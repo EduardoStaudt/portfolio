@@ -149,6 +149,7 @@ export function Contact() {
           </h2>
           <Onomatopoeia
             text="つづく"
+            sub="continua"
             size="clamp(1.6rem,4vw,3rem)"
             tone="hollow"
             rotate={-10}

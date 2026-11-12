@@ -34,7 +34,10 @@ function CoverFace({ clone = false }: { clone?: boolean }) {
         aria-hidden
         className="bg-ink text-paper absolute inset-y-0 right-0 hidden w-12 flex-col items-center justify-between py-24 sm:flex"
       >
-        <span className="font-display text-sm [writing-mode:vertical-rl]">ポートフォリオ</span>
+        <span className="font-display text-sm [writing-mode:vertical-rl]">
+          ポートフォリオ
+          <span className="font-bubble mt-2 text-[0.6rem]">portfólio</span>
+        </span>
         <span className="font-bubble text-[0.7rem] [writing-mode:vertical-rl]">
           {site.shortName} · {site.volume}
         </span>
@@ -65,6 +68,9 @@ function CoverFace({ clone = false }: { clone?: boolean }) {
               className="font-display ink-hollow absolute -top-[1.1em] left-0 text-[clamp(1.4rem,3.4vw,3rem)] tracking-widest opacity-80"
             >
               {site.kana}
+              <span className="font-bubble text-ink ml-2 align-middle text-[0.3em] tracking-normal [-webkit-text-stroke:0]">
+                ({first})
+              </span>
             </span>
             <h1 className="text-(length:--fs-hero) leading-[0.86] uppercase">
               <span className="block">{first}</span>
@@ -88,10 +94,14 @@ function CoverFace({ clone = false }: { clone?: boolean }) {
               // cópia das tiras: a onomatopeia já entrou, fica parada
               <span className="font-display text-accent ink-outline absolute -top-2 left-[calc(100%+0.75rem)] inline-block -rotate-[14deg] text-[clamp(2rem,5vw,4rem)] leading-none whitespace-nowrap lg:-top-14 lg:-left-20">
                 ドン!
+                <span className="font-bubble text-ink ml-1 align-top text-[0.22em] [-webkit-text-stroke:0]">
+                  DON!
+                </span>
               </span>
             ) : (
               <Onomatopoeia
                 text="ドン!"
+                sub="DON!"
                 size="clamp(2rem,5vw,4rem)"
                 rotate={-14}
                 tone="accent"
