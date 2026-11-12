@@ -18,7 +18,7 @@ function Glass() {
     <>
       <rect x="70" y="40" width="260" height="220" fill={PAPER} stroke={INK} strokeWidth="6" />
       <path d="M200 40V260M70 150H330" stroke={INK} strokeWidth="5" />
-      <path d="M70 150H200V260H70Z" fill="var(--spot-3)" opacity="0.85" />
+      <path d="M70 150H200V260H70ZM200 40H330V150H200Z" fill="var(--spot-3)" opacity="0.85" />
       {/* reflexos */}
       <path
         d="M92 120L150 58M110 130L176 60M222 236L300 160M246 244L312 178"

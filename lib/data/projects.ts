@@ -18,7 +18,8 @@ export type Project = {
   description: string;
   highlights: string[];
   stack: string[];
-  link?: { label: string; href: string };
+  /** endereço do projeto; o rótulo do botão é o mesmo para todos (`projectsIntro.linkLabel`) */
+  link?: string;
   /** selo opcional na página (ex.: 'Em andamento') */
   status?: string;
   /** próxima fase do projeto: vira um quadro "Parte 2" na página de detalhes */
@@ -36,6 +37,7 @@ export const projectsIntro = {
   kicker: 'Capítulo 2',
   title: 'Projetos',
   lead: 'Cada projeto, uma página dupla.',
+  linkLabel: 'Ver projeto',
 };
 
 export const projects: Project[] = [
@@ -51,10 +53,10 @@ export const projects: Project[] = [
       'Pensado para o fluxo real de vidraçarias',
       'Produto no ar, acessível pelo navegador',
     ],
-    stack: ['Web', 'ERP'],
-    link: { label: 'Abrir glazzy.pages.dev', href: 'https://glazzy.pages.dev' },
+    stack: ['Flutter', 'Dart', 'Cloudflare'],
+    link: 'https://glazzy.pages.dev',
     art: 'glass',
-    alt: 'Uma grande vidraça dividida em painéis, com reflexos diagonais e uma lasca brilhando.',
+    alt: 'Uma grande vidraça dividida em quatro painéis, dois deles azuis, com reflexos diagonais e uma lasca brilhando.',
     sfx: { text: 'キラーン', sub: 'BRILHO' },
     accent: 'blue',
   },
@@ -78,7 +80,7 @@ export const projects: Project[] = [
       text: 'A continuação da pesquisa, na mesma plataforma: as leis da física dentro da rede.',
       topics: ['PINNs', 'Misturas multicomponente', 'Leitos estratificados'],
     },
-    link: { label: 'Abrir a plataforma', href: 'https://nnadsorption-app.web.app/' },
+    link: 'https://nnadsorption-app.web.app/',
     art: 'adsorption',
     alt: 'Um gráfico com uma curva de adsorção subindo e saturando, com pontos de dados e neurônios conectados ao fundo.',
     sfx: { text: 'ゴオオオ', sub: 'GOOOO' },
@@ -98,7 +100,7 @@ export const projects: Project[] = [
       'Documentação e vice-liderança da equipe',
     ],
     stack: ['Godot 4', 'GDScript', 'Pixel art'],
-    link: { label: 'Jogar no itch.io', href: 'https://thefenexy.itch.io/hero-maze' },
+    link: 'https://thefenexy.itch.io/hero-maze',
     art: 'maze',
     alt: 'Um labirinto visto de cima com um pequeno herói em pixel art encarando um chefe com chifres.',
     sfx: { text: 'ドドド', sub: 'DO DO DO' },

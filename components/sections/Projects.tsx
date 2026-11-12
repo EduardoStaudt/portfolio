@@ -163,12 +163,12 @@ function DetailPage({ project, index }: { project: Project; index: number }) {
       <div className="mt-auto flex items-end justify-between gap-3 pl-[1.2em]">
         {project.link ? (
           <a
-            href={project.link.href}
+            href={project.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-display bg-accent text-on-accent shadow-bubble hover:bg-ink hover:text-paper border-[3px] border-(--ink) px-[1em] py-[0.6em] text-[0.9em] leading-tight transition-colors"
+            className="font-display bg-accent text-on-accent shadow-bubble hover:bg-ink hover:text-paper border-[3px] border-(--ink) px-[1.3em] py-[0.7em] text-[1.05em] leading-tight transition-colors"
           >
-            {project.link.label} ↗<span className="sr-only"> (abre em nova aba)</span>
+            {projectsIntro.linkLabel} ↗<span className="sr-only"> (abre em nova aba)</span>
           </a>
         ) : (
           <p className="font-bubble border-2 border-dashed border-(--ink) px-[0.8em] py-[0.5em] text-[0.8em]">
