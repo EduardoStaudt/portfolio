@@ -92,18 +92,25 @@ export function Skills() {
       id="habilidades"
       tabIndex={-1}
       aria-labelledby="habilidades-titulo"
-      className="relative px-(--space-page) py-24 outline-none"
+      // desktop: o capítulo inteiro (título, campo, plaquinhas e ficha) cabe em uma tela
+      className="relative flex flex-col gap-5 px-(--space-page) py-24 outline-none lg:h-svh lg:min-h-[36rem] lg:gap-4 lg:pt-[calc(var(--space-header)+0.25rem)] lg:pb-6"
     >
       <ChapterHeading
         id="habilidades-titulo"
         kicker={skillsIntro.kicker}
         title={skillsIntro.title}
         lead={hydrated && !finePointer ? skillsIntro.leadTouch : skillsIntro.lead}
+        className="lg:flex-row lg:items-center lg:gap-4 lg:[&_h2]:text-(length:--fs-2xl) lg:[&_p:last-child]:ml-auto lg:[&_p:last-child]:max-w-sm lg:[&_p:last-child]:text-right lg:[&_p:last-child]:text-sm"
       />
 
-      <div className="relative mt-8 lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-(--space-gutter)">
-        <div className="min-w-0">
-          <Panel seed={51} weight={6} shadow className="h-[62svh] max-h-[46rem] min-h-[24rem]">
+      <div className="relative lg:grid lg:min-h-0 lg:flex-1 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-(--space-gutter)">
+        <div className="flex min-w-0 flex-col gap-4 lg:min-h-0">
+          <Panel
+            seed={51}
+            weight={6}
+            shadow
+            className="h-[62svh] max-h-[46rem] min-h-[24rem] lg:h-auto lg:max-h-none lg:min-h-0 lg:flex-1"
+          >
             <div ref={stage} className="absolute inset-0">
               <ScreenTone size={9} dot={20} fade="down" opacity={0.28} />
               <div
@@ -163,8 +170,7 @@ export function Skills() {
                     slotPos[swords.indexOf(hoveredSword)],
                   )}
                 >
-                  <p className="font-bubble text-[0.65rem] opacity-70">{hoveredSword.area}</p>
-                  <p className="font-display mb-2 text-base leading-tight">{hoveredSword.name}</p>
+                  <p className="font-display mb-2 text-base leading-tight">{hoveredSword.area}</p>
                   <SkillChips sword={hoveredSword} />
                   <InkBorder seed={52} weight={3} />
                 </motion.div>
@@ -184,7 +190,7 @@ export function Skills() {
           </Panel>
 
           {/* plaquinhas: controle por teclado/toque e legenda de cada espada */}
-          <ul className="mt-5 grid grid-cols-3 gap-2 sm:gap-(--space-gutter)">
+          <ul className="grid shrink-0 grid-cols-3 gap-2 sm:gap-(--space-gutter)">
             {swords.map((sword) => {
               const on = selected === sword.id;
               return (
@@ -199,7 +205,7 @@ export function Skills() {
                     onFocus={() => setHovered(sword.id)}
                     onBlur={() => setHovered(null)}
                     className={cn(
-                      'relative flex h-full w-full flex-col items-start gap-1 border-[3px] border-(--ink) p-2.5 text-left transition-colors sm:p-4',
+                      'relative flex h-full w-full flex-col items-start gap-1.5 border-[3px] border-(--ink) p-2.5 text-left transition-colors sm:px-4 sm:py-3',
                       on ? 'bg-ink text-paper' : 'bg-paper text-ink hover:bg-paper-shade',
                     )}
                   >
@@ -214,9 +220,6 @@ export function Skills() {
                     <span className="font-display text-sm leading-tight sm:text-lg">
                       {sword.area}
                     </span>
-                    <span className="font-bubble text-[0.65rem] opacity-80 sm:text-xs">
-                      {sword.name}
-                    </span>
                     <span className="sr-only">{on ? '(empunhada)' : '(fincada no chão)'}</span>
                   </button>
                 </li>
@@ -226,7 +229,11 @@ export function Skills() {
         </div>
 
         {/* ficha da espada empunhada: ao lado do campo no desktop, abaixo no celular */}
-        <div id="espada-detalhe" aria-live="polite" className="lg:h-full">
+        <div
+          id="espada-detalhe"
+          aria-live="polite"
+          className="lg:min-h-0 lg:overflow-y-auto lg:pr-2 lg:pb-2"
+        >
           <AnimatePresence mode="wait">
             {selectedSword && (
               <motion.div
@@ -237,7 +244,6 @@ export function Skills() {
                 transition={{ type: 'spring', stiffness: 320, damping: 24 }}
                 className="bg-paper shadow-panel relative mt-5 p-5 sm:p-6 lg:mt-0"
               >
-                <p className="font-bubble text-xs opacity-70">{selectedSword.name}</p>
                 <h3 className="mb-2 text-2xl">{selectedSword.area}</h3>
                 <p className="font-bubble mb-3 text-[0.8rem]">“{selectedSword.motto}”</p>
                 <p className="mb-4 text-sm">{selectedSword.description}</p>

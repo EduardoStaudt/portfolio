@@ -8,15 +8,13 @@ export type SwordDesign = 'pixel' | 'neural' | 'root';
 export type SkillSword = {
   id: string;
   design: SwordDesign;
-  /** nome da espada */
-  name: string;
-  /** área que ela representa */
+  /** área que a espada representa */
   area: string;
   /** cor de destaque no modo colorido */
   accent: 'blue' | 'red' | 'orange';
-  /** frase curta que aparece no hover */
+  /** frase curta da ficha */
   motto: string;
-  /** texto do painel detalhado */
+  /** texto da ficha */
   description: string;
   skills: { name: string; note?: string }[];
   sfx: string;
@@ -32,30 +30,31 @@ export const skillsIntro = {
   emptyText: 'Clique em uma espada para abrir a ficha completa dela.',
 };
 
+// a ordem é a posição no campo: esquerda, meio, direita
 export const swords: SkillSword[] = [
   {
-    id: 'front-end',
+    id: 'full-stack',
     design: 'pixel',
-    name: 'Lâmina Pixel',
-    area: 'Front-end',
+    area: 'Full-Stack',
     accent: 'blue',
-    motto: 'Corta interface com precisão de um pixel.',
+    motto: 'Da tela ao banco de dados.',
     description:
-      'A espada leve, de quem constrói o que as pessoas veem e tocam: aplicativos e sites, jogos e a arte que vai dentro deles.',
+      'A espada de quem constrói o produto inteiro: a interface que as pessoas usam, a API por trás dela e os dados que a sustentam.',
     skills: [
       { name: 'Flutter (Dart)', note: 'web e mobile' },
-      { name: 'Next.js / React', note: 'este portfólio' },
+      { name: 'Next.js / React' },
       { name: 'TypeScript' },
-      { name: 'Tailwind CSS' },
-      { name: 'Godot / GDScript', note: 'jogos' },
-      { name: 'Pixel art', note: 'sprites' },
+      { name: 'Java' },
+      { name: 'FastAPI', note: 'API REST' },
+      { name: 'SQL / Supabase' },
+      { name: 'Cloudflare' },
+      { name: 'Git / GitHub' },
     ],
     sfx: 'シャキン',
   },
   {
     id: 'machine-learning',
     design: 'neural',
-    name: 'Montante Neural',
     area: 'Machine Learning',
     accent: 'red',
     motto: 'A lâmina principal. Pesada, larga e ainda em forja.',
@@ -73,21 +72,20 @@ export const swords: SkillSword[] = [
     sfx: 'ズバァン',
   },
   {
-    id: 'back-end',
+    id: 'outros',
     design: 'root',
-    name: 'Gládio Raiz',
-    area: 'Back-end e base',
+    area: 'Outros',
     accent: 'orange',
-    motto: 'Curta, firme e confiável. A fundação de tudo.',
+    motto: 'O que não cabe nas outras duas bainhas.',
     description:
-      'A espada da base: APIs, banco de dados, lógica de baixo nível e as ferramentas que mantêm um projeto de pé.',
+      'As ferramentas de apoio e o jeito de trabalhar: arte para os jogos, escrita científica e as habilidades de equipe.',
     skills: [
-      { name: 'Java', note: 'orientação a objetos' },
-      { name: 'FastAPI', note: 'API REST' },
-      { name: 'SQL / Supabase' },
-      { name: 'C e Assembly' },
-      { name: 'Estruturas de dados' },
-      { name: 'Git / GitHub' },
+      { name: 'Aseprite', note: 'pixel art' },
+      { name: 'LaTeX' },
+      { name: 'Trabalho em equipe' },
+      { name: 'Aprendizado rápido' },
+      { name: 'Curiosidade' },
+      { name: 'Metodologias ágeis' },
     ],
     sfx: 'ガキン',
   },
