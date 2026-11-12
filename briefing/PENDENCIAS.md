@@ -43,6 +43,10 @@ O que depende de você, Eduardo. Quase tudo se resolve editando `lib/data/`.
 - O capítulo de habilidades fica pinado por um trecho do scroll no desktop, como o livro de projetos.
 - Toda onomatopeia em japonês tem a leitura pequena ao lado (capa, lombada, balão que quebra, golpe de espada, contracapa, espadas). O currículo não tem mais nada em japonês.
 - A faixa do chapéu de palha é vermelha e o chapéu inteiro pisca de leve, como pista de que ele é clicável.
+- No celular (telas com menos de 640px):
+  - Os botões dos projetos mostram números (1 a 4) em uma linha só, com o nome do projeto atual em cima; a altura do carrossel acompanha o projeto à vista.
+  - No duelo, a mão inteira cabe na largura da tela: as cartas da mão ficam pequenas (desenho, custo e nome) e o efeito da carta tocada aparece em uma faixa abaixo. O tabuleiro cabe em 375×667 sem rolar.
+- O chapéu de palha passou a ser desenhado em SVG nativo (antes usava `foreignObject`, que o Safari do iPhone costuma posicionar errado).
 - Todos os botões de projeto dizem "Ver projeto" (`projectsIntro.linkLabel`).
 - O site abre no modo escuro e colorido para quem ainda não escolheu; a preferência do sistema operacional não é mais consultada. A escolha feita nos botões continua salva.
 - O balão "Meu plano?" do último quadro do Cap. 1 quebra ao ser clicado e revela "Empreender!". Com movimento reduzido, a troca é direta.
@@ -61,6 +65,7 @@ O que depende de você, Eduardo. Quase tudo se resolve editando `lib/data/`.
 - [ ] **Lighthouse**: não rodei. Rode no deploy da Vercel.
 - [ ] **Impressão real**: gerei o PDF do currículo pelo Chrome (uma página em A4 e em Carta). Não imprimi em papel nem testei Firefox ou Safari.
 - [ ] **Folha flexível**: conferida no Chrome headless. O efeito usa 3D aninhado; não testei em Safari nem em máquina fraca.
+- [ ] **Chapéu no iPhone**: a troca para SVG nativo foi feita por causa do Safari, mas só conferi no Chrome emulando celular. Confirme no aparelho.
 - [ ] **Arrastar cartas**: testei clique e teclado de forma automatizada; o arrastar com mouse eu não consegui automatizar.
 - [ ] **Aparelho real**: testei em Chrome headless (360/390, 768, 1280, 1920). Não testei em celular físico, Safari nem Firefox.
 - [ ] **Leitor de tela**: a marcação ARIA está lá, mas não passei NVDA/VoiceOver.
