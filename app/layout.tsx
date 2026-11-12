@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Comic_Neue, Dela_Gothic_One, Inter } from 'next/font/google';
 import { palette, tokensToCss } from '@/styles/tokens';
 import { DEFAULT_THEME, themeInitScript } from '@/lib/theme';
@@ -88,6 +89,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <ChapterSlash />
           <Cursor />
         </Providers>
+        {/* métricas de desempenho no painel da Vercel (só coleta em produção, hospedado lá) */}
+        <SpeedInsights />
       </body>
     </html>
   );

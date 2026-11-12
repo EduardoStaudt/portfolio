@@ -25,6 +25,7 @@ Requer Node 20 ou mais novo.
 - React Three Fiber + three.js: cena das espadas, com shader de cel shading próprio
 - Fontes via `next/font`: Dela Gothic One (títulos e katakana), Inter (corpo), Comic Neue (balões)
 - Vitest: testes das regras do duelo de cartas
+- Vercel Speed Insights: métricas de desempenho no painel da Vercel
 - Sem backend. Contato por links; o botão de e-mail abre o `mailto:` e copia o endereço.
 
 ## Estrutura
