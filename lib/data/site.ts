@@ -10,7 +10,7 @@ export const site = {
   /** nome em katakana, só decorativo na capa */
   kana: 'エドゥアルド',
   volume: 'Vol. 1',
-  tagline: 'Ciência da Computação + Economia',
+  tagline: 'Full Stack',
   focus: 'Machine Learning',
   description:
     'Portfólio em formato de mangá de Eduardo Andrei Staudt: estudante de Ciência da Computação (UTFPR) e Ciências Econômicas (Uninter), pesquisador em redes neurais, desenvolvedor e pixel artist.',

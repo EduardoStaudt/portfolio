@@ -39,7 +39,8 @@ export type AboutPanel = {
 export const aboutIntro = {
   kicker: 'Capítulo 1',
   title: 'Quem sou',
-  lead: 'A origem do protagonista, em seis quadros.',
+  /** como ler o site: fica no quadro de abertura do capítulo */
+  lead: 'Leia de cima para baixo. Quando a página virar de lado, é só continuar rolando!',
 };
 
 export const aboutPanels: AboutPanel[] = [
@@ -74,7 +75,7 @@ export const aboutPanels: AboutPanel[] = [
     id: 'cursos',
     art: 'campus',
     alt: 'Dois prédios de universidade lado a lado, ligados por uma ponte.',
-    caption: 'Duas graduações ao mesmo tempo.',
+    caption: 'Cursando duas graduações ao mesmo tempo.',
     bubbles: [
       { kind: 'speech', text: 'Curso Ciência da Computação na UTFPR, campus Santa Helena...' },
       { kind: 'speech', text: '...e Ciências Econômicas na Uninter.' },
@@ -82,18 +83,6 @@ export const aboutPanels: AboutPanel[] = [
     ],
     sfx: { text: 'ゴゴゴ', sub: 'GO GO GO', tone: 'ink' },
     size: 'lg',
-  },
-  {
-    id: 'ic',
-    art: 'network',
-    alt: 'Diagrama de uma rede neural com camadas de neurônios conectados.',
-    caption: 'Iniciação científica.',
-    bubbles: [
-      { kind: 'speech', text: 'Na IC, treino redes neurais para modelar fenômenos reais.' },
-      { kind: 'thought', text: 'E se a rede também obedecesse às leis da física? (PINNs...)' },
-    ],
-    sfx: { text: 'ピカッ', sub: 'FLASH', tone: 'blue' },
-    size: 'md',
   },
   {
     id: 'faculdade',
@@ -116,6 +105,18 @@ export const aboutPanels: AboutPanel[] = [
     ],
     sfx: { text: 'カタカタ', sub: 'TEC TEC', tone: 'ink' },
     size: 'lg',
+  },
+  {
+    id: 'ic',
+    art: 'network',
+    alt: 'Diagrama de uma rede neural com camadas de neurônios conectados.',
+    caption: 'Participando de iniciações científicas.',
+    bubbles: [
+      { kind: 'speech', text: 'Na IC, treino redes neurais para modelar fenômenos reais.' },
+      { kind: 'thought', text: 'E se a rede também obedecesse às leis da física? (PINNs...)' },
+    ],
+    sfx: { text: 'ピカッ', sub: 'FLASH', tone: 'blue' },
+    size: 'md',
   },
   {
     id: 'objetivo',

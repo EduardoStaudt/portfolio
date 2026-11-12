@@ -18,7 +18,7 @@ export const eggs: Egg[] = [
     id: 'tesouro',
     name: 'O chapéu de palha',
     found: 'Tesouro encontrado!',
-    hint: 'Alguém esqueceu um chapéu de palha em um dos quadros do Capítulo 1.',
+    hint: 'Alguém no Capítulo 1 está usando um chapéu de palha.',
   },
   {
     id: 'serra',

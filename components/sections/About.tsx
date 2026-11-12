@@ -20,6 +20,12 @@ import { AboutIllustration } from '@/components/manga/illustrations/about';
 import { StrawHat } from '@/components/easter-eggs/StrawHat';
 import { cn } from '@/lib/cn';
 
+/**
+ * Trecho de scroll, em alturas de tela, em que a capa abre por cima deste capítulo (desktop).
+ * Precisa bater com a altura da seção da capa: 240vh = 100vh de tela + 140vh de abertura.
+ */
+const COVER_SCROLL = 1.4;
+
 const widths: Record<AboutPanel['size'], string> = {
   sm: 'lg:motion-safe:w-[26rem]',
   md: 'lg:motion-safe:w-[34rem]',
@@ -83,8 +89,19 @@ function StoryPanel({ panel, index }: { panel: AboutPanel; index: number }) {
           className="absolute inset-x-0 top-1/2 aspect-[4/3] -translate-y-1/2 lg:motion-safe:inset-x-[-2.5rem] lg:motion-safe:inset-y-0 lg:motion-safe:aspect-auto lg:motion-safe:translate-y-0"
         >
           <AboutIllustration art={panel.art} alt={panel.alt} />
+          {/* o chapéu de palha na cabeça do personagem: mesmo enquadramento do desenho */}
+          {panel.art === 'hero' && (
+            <svg
+              viewBox="0 0 400 300"
+              preserveAspectRatio="xMidYMid slice"
+              className="pointer-events-none absolute inset-0 h-full w-full"
+            >
+              <foreignObject x="157" y="127" width="76" height="50" className="overflow-visible">
+                <StrawHat className="pointer-events-auto block h-full w-full" />
+              </foreignObject>
+            </svg>
+          )}
         </div>
-        {panel.art === 'campus' && <StrawHat className="top-[18%] left-[47%]" />}
         {panel.sfx && (
           <div data-depth="-0.6" className="absolute right-4 bottom-[34%]">
             <Onomatopoeia
@@ -93,7 +110,6 @@ function StoryPanel({ panel, index }: { panel: AboutPanel; index: number }) {
               tone={panel.sfx.tone}
               size="clamp(2.4rem,4.5vw,4.2rem)"
               rotate={index % 2 === 0 ? -10 : 8}
-              shake={index === 0}
             />
           </div>
         )}
@@ -115,6 +131,7 @@ function StoryPanel({ panel, index }: { panel: AboutPanel; index: number }) {
 
 /**
  * Cap. 1. Desktop: seção pinada (sticky) em que o scroll vertical empurra a tira para a esquerda.
+ * A seção começa por baixo da capa (margem negativa) e só anda depois que ela abre.
  * Mobile / movimento reduzido: os mesmos quadros empilhados, leitura estilo webtoon.
  */
 export function About() {
@@ -129,8 +146,10 @@ export function About() {
       const strip = track.current;
       if (!section || !strip) return;
       const distance = () => Math.max(0, strip.scrollWidth - window.innerWidth);
+      // enquanto a capa abre, a tira fica parada por baixo dela
+      const lead = () => COVER_SCROLL * window.innerHeight;
       const setHeight = () => {
-        section.style.height = `${distance() + window.innerHeight}px`;
+        section.style.height = `${lead() + distance() + window.innerHeight}px`;
       };
       setHeight();
 
@@ -139,7 +158,7 @@ export function About() {
         ease: 'none',
         scrollTrigger: {
           trigger: section,
-          start: 'top top',
+          start: () => `top+=${lead()} top`,
           end: 'bottom bottom',
           scrub: 0.5,
           invalidateOnRefresh: true,
@@ -187,11 +206,15 @@ export function About() {
   return (
     <section
       ref={wrap}
-      id="quem-sou"
-      tabIndex={-1}
       aria-labelledby="quem-sou-titulo"
-      className="relative outline-none"
+      className="relative lg:motion-safe:-mt-[240vh]"
     >
+      {/* âncora do capítulo: no desktop fica depois do trecho em que a capa abre */}
+      <div
+        id="quem-sou"
+        tabIndex={-1}
+        className="pointer-events-none absolute inset-x-0 top-0 h-px outline-none lg:motion-safe:top-[140vh]"
+      />
       <div className="lg:motion-safe:sticky lg:motion-safe:top-0 lg:motion-safe:flex lg:motion-safe:h-screen lg:motion-safe:items-center lg:motion-safe:overflow-hidden lg:motion-safe:pt-(--space-header)">
         <div
           ref={track}
@@ -212,7 +235,7 @@ export function About() {
             <h2 id="quem-sou-titulo" className="relative text-(length:--fs-3xl) uppercase">
               {aboutIntro.title}
             </h2>
-            <p className="relative max-w-xs text-base opacity-85">{aboutIntro.lead}</p>
+            <p className="font-bubble relative max-w-xs text-base">{aboutIntro.lead}</p>
             <p
               className="font-display relative mt-4 hidden text-2xl lg:motion-safe:block"
               aria-hidden

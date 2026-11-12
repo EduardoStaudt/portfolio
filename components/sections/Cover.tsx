@@ -4,22 +4,16 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { site } from '@/lib/data/site';
-import { chapters } from '@/lib/data/chapters';
-import {
-  InkBorder,
-  Onomatopoeia,
-  Panel,
-  ScreenTone,
-  SpeechBubble,
-  SpeedLines,
-} from '@/components/manga';
+import { DESKTOP_MOTION_QUERY } from '@/lib/hooks/useIsMobile';
+import { InkBorder, Onomatopoeia, ScreenTone, SpeedLines } from '@/components/manga';
 import { PageBend, applyBend } from '@/components/manga/PageBend';
 import { Logo } from '@/components/ui/Logo';
-import { useChapterLink } from '@/components/ui/Nav';
+import { Logo3D } from '@/components/ui/Logo3D';
 
 const [first, ...rest] = site.name.split(' ');
 /** giro da capa aberta, em graus: um pouco além de 90, de perfil para o leitor */
 const OPEN_ANGLE = 96;
+const LOGO_SIZE = 'clamp(6.5rem,18vw,11rem)';
 
 /** A arte da capa. `clone`: cópia usada nas tiras da folha flexível (sem animações próprias). */
 function CoverFace({ clone = false }: { clone?: boolean }) {
@@ -47,10 +41,7 @@ function CoverFace({ clone = false }: { clone?: boolean }) {
       </div>
 
       <div className="relative flex h-full flex-col justify-between gap-6 px-(--space-page) pt-[calc(var(--space-header)+0.5rem)] pb-8 sm:pr-[calc(var(--space-page)+3rem)]">
-        <div className="flex items-start justify-between gap-4">
-          <p className="font-bubble border-y-[3px] border-(--ink) py-1 text-xs sm:text-sm">
-            Portfólio · edição de estreia
-          </p>
+        <div className="flex items-start justify-end gap-4">
           <div className="relative grid h-20 w-20 shrink-0 rotate-12 place-items-center sm:h-28 sm:w-28">
             <svg aria-hidden viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
               <polygon
@@ -88,11 +79,11 @@ function CoverFace({ clone = false }: { clone?: boolean }) {
             </h1>
           </div>
           <div className="relative justify-self-start lg:justify-self-end">
-            <Logo
-              size="clamp(6.5rem,18vw,11rem)"
-              priority={!clone}
-              className="shadow-lift -rotate-3 border-4"
-            />
+            {clone ? (
+              <Logo size={LOGO_SIZE} className="shadow-lift -rotate-3 border-4" />
+            ) : (
+              <Logo3D size={LOGO_SIZE} className="-rotate-3" />
+            )}
             {clone ? (
               // cópia das tiras: a onomatopeia já entrou, fica parada
               <span className="font-display text-accent ink-outline absolute -top-2 left-[calc(100%+0.75rem)] inline-block -rotate-[14deg] text-[clamp(2rem,5vw,4rem)] leading-none whitespace-nowrap lg:-top-14 lg:-left-20">
@@ -124,7 +115,8 @@ function CoverFace({ clone = false }: { clone?: boolean }) {
             className="font-bubble bob flex items-center gap-3 text-[clamp(1.15rem,3.2vw,3rem)] leading-none"
             aria-hidden
           >
-            <span className="ink-outline motion-reduce:hidden">Role para abrir a capa</span>
+            <span className="ink-outline hidden lg:motion-safe:inline">Role para abrir a capa</span>
+            <span className="ink-outline lg:motion-safe:hidden">Role para ler</span>
             <span className="font-display ink-outline text-accent text-[1.3em]">↓</span>
           </p>
         </div>
@@ -139,16 +131,15 @@ function CoverFace({ clone = false }: { clone?: boolean }) {
 }
 
 /**
- * Capa do volume. O scroll "abre a capa": ela gira em 3D pela lombada
- * (direita, como nos mangás japoneses)
- * e revela a página de rosto com o sumário. Enquanto abre, a capa é trocada por uma versão
- * em tiras (PageBend) e se curva como papel. Sem movimento: capa e sumário em sequência.
+ * Capa do volume. No desktop o scroll "abre a capa": ela gira em 3D pela lombada (direita,
+ * como nos mangás japoneses), curvando-se como papel (PageBend), e revela o Cap. 1, que fica
+ * por baixo dela (a seção seguinte sobe com margem negativa; ver COVER_SCROLL em About.tsx).
+ * No celular ou com movimento reduzido a capa é uma página comum, seguida do Cap. 1.
  */
 export function Cover() {
   const wrap = useRef<HTMLElement>(null);
   const cover = useRef<HTMLDivElement>(null);
   const shade = useRef<HTMLDivElement>(null);
-  const link = useChapterLink();
   // capa no meio da abertura: só então a versão em tiras é montada
   const [bending, setBending] = useState(false);
   const reapply = useRef<(() => void) | null>(null);
@@ -156,7 +147,7 @@ export function Cover() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     const mm = gsap.matchMedia();
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
+    mm.add(DESKTOP_MOTION_QUERY, () => {
       // guarda os nós agora: na limpeza (desmontagem) os refs já estão nulos
       const section = wrap.current;
       const coverEl = cover.current;
@@ -193,7 +184,7 @@ export function Cover() {
       tl.to(state, { t: 1, ease: 'power1.in', duration: 1, onUpdate: apply }, 0)
         .fromTo(shadeEl, { opacity: 0.55 }, { opacity: 0, ease: 'none', duration: 1 }, 0)
         .set(coverEl, { visibility: 'hidden' })
-        .to({}, { duration: 0.35 }); // respiro com o sumário aberto
+        .to({}, { duration: 0.12 }); // respiro com o Cap. 1 à vista
       return () => {
         reapply.current = null;
         setBending(false);
@@ -217,66 +208,26 @@ export function Cover() {
       id="capa"
       tabIndex={-1}
       aria-label="Capa"
-      className="relative outline-none motion-safe:h-[240vh]"
+      className="relative z-10 outline-none lg:motion-safe:pointer-events-none lg:motion-safe:h-[240vh]"
     >
       <div
-        className="motion-safe:sticky motion-safe:top-0 motion-safe:h-svh motion-safe:overflow-hidden"
+        className="lg:motion-safe:sticky lg:motion-safe:top-0 lg:motion-safe:h-svh lg:motion-safe:overflow-hidden"
         style={{ perspective: '2400px' }}
       >
-        {/* ---------- capa ---------- */}
+        {/* sombra que a capa projeta sobre o Cap. 1 enquanto abre */}
+        <div
+          ref={shade}
+          aria-hidden
+          className="bg-ink pointer-events-none absolute inset-0 hidden opacity-0 lg:motion-safe:block"
+        />
         <div
           ref={cover}
-          className="preserve-3d relative z-10 h-svh min-h-[34rem] origin-right will-change-transform motion-safe:absolute motion-safe:inset-0"
+          className="preserve-3d pointer-events-auto relative h-svh min-h-[34rem] origin-right will-change-transform lg:motion-safe:absolute lg:motion-safe:inset-0"
         >
           <div data-rigid className="absolute inset-0">
             <CoverFace />
           </div>
           {bending && <PageBend spine="right" front={<CoverFace clone />} />}
-        </div>
-
-        {/* ---------- página de rosto: sumário ---------- */}
-        <div className="bg-paper relative flex min-h-svh items-center px-(--space-page) py-24 motion-safe:absolute motion-safe:inset-0">
-          <ScreenTone variant="hatch" size={9} fade="left" opacity={0.18} />
-          <div className="relative mx-auto grid w-full max-w-5xl items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-            <div className="flex flex-col items-start gap-8">
-              <SpeechBubble tail="br" className="text-base">
-                Leia de cima para baixo. Quando a página virar de lado, é só continuar rolando!
-              </SpeechBubble>
-              <p className="max-w-sm text-sm opacity-80">
-                {site.shortName} · {site.tagline} · {site.focus}. Um volume, quatro capítulos e
-                alguns segredos escondidos entre os quadros.
-              </p>
-            </div>
-            <Panel seed={14} shadow className="w-full" innerClassName="p-6 sm:p-8">
-              <p className="font-display mb-5 text-(length:--fs-xl)">Sumário</p>
-              <ol className="flex flex-col gap-1">
-                {chapters.slice(1).map((c) => (
-                  <li key={c.id}>
-                    <a
-                      href={`#${c.id}`}
-                      onClick={link(c.id)}
-                      className="group hover:bg-ink hover:text-paper flex items-baseline gap-3 px-2 py-2.5 transition-colors"
-                    >
-                      <span className="font-bubble w-24 shrink-0 text-xs">{c.number}</span>
-                      <span className="font-display text-base sm:text-lg">{c.title}</span>
-                      <span
-                        aria-hidden
-                        className="mb-1 flex-1 self-end border-b-[3px] border-dotted border-current opacity-40"
-                      />
-                      <span aria-hidden className="font-display">
-                        {c.direction === 'horizontal' ? '→' : '↓'}
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ol>
-            </Panel>
-          </div>
-          <div
-            ref={shade}
-            aria-hidden
-            className="bg-ink pointer-events-none absolute inset-0 opacity-0"
-          />
         </div>
       </div>
     </section>

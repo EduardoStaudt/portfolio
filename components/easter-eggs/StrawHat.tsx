@@ -36,7 +36,7 @@ export function HatIcon({ className }: { className?: string }) {
 }
 
 /**
- * Homenagem a One Piece: um chapéu de palha esquecido em um quadro.
+ * Homenagem a One Piece: o personagem do primeiro quadro do Cap. 1 usa um chapéu de palha.
  * Clique: "Tesouro encontrado!", o cursor estica como borracha e o aviso oferece o duelo de cartas.
  */
 export function StrawHat({ className }: { className?: string }) {
@@ -44,17 +44,14 @@ export function StrawHat({ className }: { className?: string }) {
   return (
     <button
       type="button"
-      aria-label="Um chapéu de palha esquecido"
+      aria-label="O chapéu de palha do personagem"
       onClick={() => {
         unlock('tesouro', true);
         emit('rubber', { ms: 6000 });
       }}
-      className={cn(
-        'group absolute z-(--z-bubble) transition-transform hover:-translate-y-0.5 hover:rotate-6',
-        className,
-      )}
+      className={cn('group transition-transform hover:-translate-y-0.5 hover:rotate-6', className)}
     >
-      <HatIcon />
+      <HatIcon className="h-full w-full" />
     </button>
   );
 }
