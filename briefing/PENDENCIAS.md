@@ -17,7 +17,7 @@ O que depende de você, Eduardo. Quase tudo se resolve editando `lib/data/`.
 - [ ] **"Em vez de vrrrum, eduardo"**: fiz as duas leituras: a palavra a digitar agora é `eduardo`, e o grito na tela é "EDUARDO!!" (o VRRRUM ficou menor, ao fundo).
 - [ ] **Página "Em breve"**: ficou vazia de propósito, só com o desenho. A continuação com PINNs virou o quadro "Parte 2 · Em desenvolvimento" dentro do NNAdsorption. O texto desse quadro (`next` em `lib/data/projects.ts`) fui eu que escrevi: revise.
 - [ ] **Currículo impresso**: voltou a ter o desenho da página (faixa preta, títulos numerados com fio vermelho), sem logo, japonês ou retículas. Conferi gerando o PDF: uma página em A4, sem cabeçalho e rodapé do navegador, com os 18 links clicáveis.
-- [ ] **Portfólio no currículo**: o projeto entrou sem link. Quando você tiver o endereço, defina `NEXT_PUBLIC_SITE_URL` (ou troque `site.url` em `lib/data/site.ts`) e o link aparece sozinho.
+- [ ] **Portfólio no currículo**: o projeto aponta para o repositório (`github.com/EduardoStaudt/portfolio`). Quando o site estiver no ar, defina `NEXT_PUBLIC_SITE_URL` (ou troque `site.url` em `lib/data/site.ts`) e o endereço do site aparece junto.
 - [ ] **Glazzy**: a stack agora é Flutter, Dart e Cloudflare, no site e no currículo. O texto continua curto ("ERP para vidraçarias, do orçamento à entrega"); se quiser detalhar o que você fez, me passe.
 - [ ] **Técnico em Administração**: entrou como quadro no Cap. 1 e na formação do currículo. Faltam o nome da escola e o ano. O balão de pensamento ("Foi ali que comecei a entender como um negócio funciona") fui eu que escrevi: revise.
 - [ ] **Quadro da faculdade (Cap. 1)**: juntei os quadros do notebook e da pixel art em um só. A frase nova é "E nos jogos da faculdade, os sprites em pixel art ficam comigo". Ainda há "desenho pixel por pixel" no primeiro quadro, "pixel artist" na descrição do site e "Pixel art 88" no grimório: não mexi.
@@ -42,7 +42,7 @@ O que depende de você, Eduardo. Quase tudo se resolve editando `lib/data/`.
 - A palavra "protagonista" saiu do site e do currículo.
 - O capítulo de habilidades fica pinado por um trecho do scroll no desktop, como o livro de projetos.
 - Toda onomatopeia em japonês tem a leitura pequena ao lado (capa, lombada, balão que quebra, golpe de espada, contracapa, espadas). O currículo não tem mais nada em japonês.
-- A faixa do chapéu de palha é vermelha e pisca de leve, como pista de que ele é clicável.
+- A faixa do chapéu de palha é vermelha e o chapéu inteiro pisca de leve, como pista de que ele é clicável.
 - Todos os botões de projeto dizem "Ver projeto" (`projectsIntro.linkLabel`).
 - O site abre no modo escuro e colorido para quem ainda não escolheu; a preferência do sistema operacional não é mais consultada. A escolha feita nos botões continua salva.
 - O balão "Meu plano?" do último quadro do Cap. 1 quebra ao ser clicado e revela "Empreender!". Com movimento reduzido, a troca é direta.

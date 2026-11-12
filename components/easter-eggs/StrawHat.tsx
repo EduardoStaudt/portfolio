@@ -4,10 +4,16 @@ import { useEggContext } from './EasterEggProvider';
 import { emit } from '@/lib/bus';
 import { cn } from '@/lib/cn';
 
-/** Chapéu de palha genérico, desenho próprio. */
+/** Chapéu de palha genérico, desenho próprio. `blink`: pisca de leve (o chapéu clicável). */
 export function HatIcon({ className, blink = false }: { className?: string; blink?: boolean }) {
   return (
-    <svg aria-hidden width="46" height="30" viewBox="0 0 46 30" className={className}>
+    <svg
+      aria-hidden
+      width="46"
+      height="30"
+      viewBox="0 0 46 30"
+      className={cn(className, blink && 'soft-blink')}
+    >
       <ellipse
         cx="23"
         cy="22"
@@ -24,13 +30,12 @@ export function HatIcon({ className, blink = false }: { className?: string; blin
         strokeWidth="2.2"
         strokeLinejoin="round"
       />
-      {/* faixa: vermelha; no chapéu clicável ela pisca de leve */}
+      {/* faixa vermelha */}
       <path
         d="M10.3 17c8 3 17.5 3 25.400 0l.3 4c-8 3 -18 3 -26 0Z"
         fill="var(--accent)"
         stroke="var(--ink)"
         strokeWidth="1"
-        className={blink ? 'soft-blink' : undefined}
       />
       <path
         d="M15 9l2 4M22 6v5M29 8l-1.500 4M6 22l4 2M36 24l4 -2"

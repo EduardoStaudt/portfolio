@@ -65,8 +65,12 @@ export const cv = {
       name: 'Portfólio',
       stack: 'Next.js, TypeScript, Tailwind CSS',
       text: 'site pessoal em formato de mangá, com animações de página, cena 3D e um jogo de cartas com IA.',
-      // o endereço entra sozinho quando `site.url` deixar de ser placeholder (lib/data/site.ts)
-      links: site.url.includes('TODO_') ? [] : [site.url],
+      // repositório; o endereço do site entra sozinho, na frente, quando `site.url` deixar de
+      // ser placeholder (lib/data/site.ts)
+      links: [
+        ...(site.url.includes('TODO_') ? [] : [site.url]),
+        'https://github.com/EduardoStaudt/portfolio',
+      ],
     },
     {
       name: 'Hero Maze',
