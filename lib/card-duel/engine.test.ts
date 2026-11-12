@@ -77,7 +77,7 @@ describe('dano e escudo', () => {
 });
 
 describe('cura', () => {
-  it('Café da Madrugada cura 4 sem passar do máximo', () => {
+  it('Dose de Tereré cura 4 sem passar do máximo', () => {
     expect(play(duel(['cafe'], { player: { hp: 20 } })).fighters.player.hp).toBe(24);
     expect(play(duel(['cafe'], { player: { hp: 28 } })).fighters.player.hp).toBe(30);
   });

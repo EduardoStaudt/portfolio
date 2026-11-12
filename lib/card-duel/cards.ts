@@ -66,7 +66,7 @@ const playerCards: CardDef[] = [
   },
   {
     id: 'cafe',
-    name: 'Café da Madrugada',
+    name: 'Dose de Tereré',
     cost: 1,
     kind: 'heal',
     art: 'heal',
